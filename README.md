@@ -1,13 +1,13 @@
 # Introduction
 This repository includes a set of CampusNexus workflow samples to help get started extending CampusNexus using Windows Workflow Foundation.
 
-### To import these samples into your envrionemnt:
-1. Open CampusNexus Workflow Composer
+### To open a sample workflow
+1. Open **CampusNexus Workflow Composer**
 2. Within the **File** ribbon section, click **Open...**
 3. Browse to the .xaml file you wish to import (e.g. Cmc.Nexus.Crm.Entities.TaskEntity_SavingEvent_Sample - Task Saving.xaml) and click **Open**
 4. Apply any needed modifications to the Workflow
 
-### To Publish a Workflow
+### To publish a Workflow
 1. Within the **Server** ribon section, click **Publish...**
 2. Check the **Enable this Workflow Version?** check box
 3. Click the **Publish** button
