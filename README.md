@@ -1,6 +1,21 @@
 # Introduction
 This repository includes a set of CampusNexus workflow samples to help get started extending CampusNexus using Windows Workflow Foundation.
 
+### To import these samples into your envrionemnt:
+1. Open CampusNexus Workflow Composer
+2. Within the **File** ribbon section, click **Open...**
+3. Browse to the .xaml file you wish to import (e.g. Cmc.Nexus.Crm.Entities.TaskEntity_SavingEvent_Sample - Task Saving.xaml) and click **Open**
+4. Apply any needed modifications to the Workflow
+
+### To Publish a Workflow
+1. Within the **Server** ribon section, click **Publish...**
+2. Check the **Enable this Workflow Version?** check box
+3. Click the **Publish** button
+
+## General
+### General\Cmc.Nexus.Crm.Entities.TaskEntity_SavingEvent_Sample - Task Saving.xaml
+This workflow demonstrates how to create a validation for a Saving event handler.
+
 ## Azure
 ### Azure\Cmc.Nexus.Crm.Entities.TaskEntity_SavedEvent_Sample - Azure Service Bus.xaml
 This workflow demonstrates how to on-ramp messages to the [Azure Service Bus](https://docs.microsoft.com/en-us/azure/service-bus/).
@@ -8,7 +23,3 @@ This workflow demonstrates how to on-ramp messages to the [Azure Service Bus](ht
 This workflow demonstrates how to invoke an [Azure Logic App](https://docs.microsoft.com/en-us/azure/logic-apps/) from within a CampusNexus Workflow.
 ### Azure\Cmc.Nexus.Crm.Entities.TaskEntity_SavingEvent_Sample - Azure Functions.xaml
 This workflow demonstrates how to invoke an [Azure Function](https://docs.microsoft.com/en-us/azure/azure-functions/) from within a CampusNexus Workflow.
-
-## General
-### General\Cmc.Nexus.Crm.Entities.TaskEntity_SavingEvent_Sample - Task Saving.xaml
-This workflow demonstrates how to create a validation for a Saving event handler.
