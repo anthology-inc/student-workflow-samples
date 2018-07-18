@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Sample - Azure Logic Apps"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Sample - Azure Functions"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:cce="clr-namespace:Cmc.Core.Eventing;assembly=Cmc.Core"
  xmlns:ccwa="clr-namespace:Cmc.Core.Workflow.Activities;assembly=Cmc.Core.Workflow"
@@ -19,7 +19,7 @@
   <mva:VisualBasic.Settings>
     <x:Null />
   </mva:VisualBasic.Settings>
-  <sap2010:WorkflowViewState.IdRef>Demo - Azure Logic Apps_1</sap2010:WorkflowViewState.IdRef>
+  <sap2010:WorkflowViewState.IdRef>Demo - Azure Functions_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System.Activities</x:String>
@@ -34,6 +34,7 @@
       <x:String>System.Windows.Markup</x:String>
       <x:String>Cmc.Core.EntityModel</x:String>
       <x:String>Cmc.Core.ComponentModel</x:String>
+      <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -50,21 +51,22 @@
       <AssemblyReference>System</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
       <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:String" Name="responseBody" />
       <Variable x:TypeArguments="x:String" Name="message" />
     </Sequence.Variables>
     <ccwa:SerializeToJson DisplayName="Serialize" sap2010:WorkflowViewState.IdRef="SerializeToJson_1" Object="[entity]" Result="[message]" />
-    <ccwa:Http Headers="{x:Null}" ResponseStatusCode="{x:Null}" Body="[message]" DisplayName="Invoke Azure Logic App" sap2010:WorkflowViewState.IdRef="Http_1" MediaType="application/json" Method="POST" ResponseBody="[responseBody]" Uri="https://logicAppUrl" />
-    <If Condition="[not string.IsNullOrEmpty(responseBody)]" DisplayName="If response is not empty..." sap2010:WorkflowViewState.IdRef="If_1">
+    <ccwa:Http Headers="{x:Null}" ResponseStatusCode="{x:Null}" Body="[message]" DisplayName="Invoke Azure Function" sap2010:WorkflowViewState.IdRef="Http_1" MediaType="application/json" Method="POST" ResponseBody="[responseBody]" Uri="https://azureFunctionUrl" />
+    <If Condition="[not string.IsNullOrEmpty(responseBody) AND responseBody &lt;&gt; &quot;&quot;&quot;&quot;&quot;&quot;]" DisplayName="If response is not empty..." sap2010:WorkflowViewState.IdRef="If_1">
       <If.Then>
         <ccwa:CreateValidationItem DisplayName="Create validation error" sap2010:WorkflowViewState.IdRef="CreateValidationItem_1" Message="[responseBody]" Messages="[args.ValidationMessages]" />
       </If.Then>
     </If>
-    <sads:DebugSymbol.Symbol>d4QBRDpcU291cmNlXGV3ZWxsbml0elxjYW1wdXMtbWFuYWdlbWVudC1zYW1wbGVzXFdvcmtmbG93c1xDbWMuTmV4dXMuQ3JtLkVudGl0aWVzLlRhc2tFbnRpdHlfU2F2aW5nRXZlbnRfU2FtcGxlIC0gQXp1cmUgTG9naWMgQXBwcy54YW1sDzcDRA4CAQE8BTyOAQIBET0FPYUCAgEJPgVCCgIBAjxuPHgCARQ8gAE8iwECARI9Rj1RAgEPPaoBPbwBAgEOPdgBPegBAgEMPe0BPYICAgELPcQBPcoBAgEKPhM+PQIBA0AJQMMBAgEFQIsBQJsBAgEHQKUBQMABAgEG</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d4MBRDpcU291cmNlXGV3ZWxsbml0elxjYW1wdXMtbWFuYWdlbWVudC1zYW1wbGVzXFdvcmtmbG93c1xDbWMuTmV4dXMuQ3JtLkVudGl0aWVzLlRhc2tFbnRpdHlfU2F2aW5nRXZlbnRfU2FtcGxlIC0gQXp1cmUgRnVuY3Rpb25zLnhhbWwPOQNGDgIBAT4FPo4BAgESPwU/iQICAQpABUQKAgECPm4+eAIBFT6AAT6LAQIBEz9GP1ECARA/qQE/uwECAQ8/1wE/5wECAQ0/7AE/hgICAQw/wwE/yQECAQtAE0B8AgEDQglCwwECAQZCiwFCmwECAQhCpQFCwAECAQc=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -72,14 +74,14 @@
       <sap2010:ViewStateData Id="Http_1" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="CreateValidationItem_1" sap:VirtualizedContainerService.HintSize="314,111" />
       <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,259" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="486,507">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="486,507">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Demo - Azure Logic Apps_1" sap:VirtualizedContainerService.HintSize="526,587" />
+      <sap2010:ViewStateData Id="Demo - Azure Functions_1" sap:VirtualizedContainerService.HintSize="526,587" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
