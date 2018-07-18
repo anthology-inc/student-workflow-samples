@@ -21,5 +21,9 @@ This workflow demonstrates how to create a validation for a Saving event handler
 This workflow demonstrates how to on-ramp messages to the [Azure Service Bus](https://docs.microsoft.com/en-us/azure/service-bus/).
 ### Azure\Cmc.Nexus.Crm.Entities.TaskEntity_SavingEvent_Sample - Azure Logic Apps.xaml
 This workflow demonstrates how to invoke an [Azure Logic App](https://docs.microsoft.com/en-us/azure/logic-apps/) from within a CampusNexus Workflow.
+1. Follow the steps above to open the sample Workflow
+2. Modify the **Uri** property of the **Invoke Azure Logic App** activity to match the URI of your HTTP-triggered Azure Logic App
 ### Azure\Cmc.Nexus.Crm.Entities.TaskEntity_SavingEvent_Sample - Azure Functions.xaml
 This workflow demonstrates how to invoke an [Azure Function](https://docs.microsoft.com/en-us/azure/azure-functions/) from within a CampusNexus Workflow.
+1. Follow the steps above to open the sample Workflow
+2. Modify the **Uri** property of the **Invoke Azure Function** activity to match the URI of your HTTP-triggered Azure Function
