@@ -1,0 +1,85 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Sample - Azure Logic Apps"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:cce="clr-namespace:Cmc.Core.Eventing;assembly=Cmc.Core"
+ xmlns:ccwa="clr-namespace:Cmc.Core.Workflow.Activities;assembly=Cmc.Core.Workflow"
+ xmlns:cnce="clr-namespace:Cmc.Nexus.Crm.Entities;assembly=Cmc.Nexus.Crm.Contracts"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="entity" Type="InOutArgument(cnce:TaskEntity)" />
+    <x:Property Name="args" Type="InOutArgument(cce:ValidationEventArgs)" />
+    <x:Property Name="event" Type="InOutArgument(cce:SavingEvent)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>Demo - Azure Logic Apps_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Cmc.Core.Eventing</x:String>
+      <x:String>Cmc.Nexus.Crm.Entities</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>Cmc.Core.EntityModel</x:String>
+      <x:String>Cmc.Core.ComponentModel</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Cmc.Core</AssemblyReference>
+      <AssemblyReference>Cmc.Nexus.Crm.Contracts</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="responseBody" />
+      <Variable x:TypeArguments="x:String" Name="message" />
+    </Sequence.Variables>
+    <ccwa:SerializeToJson DisplayName="Serialize" sap2010:WorkflowViewState.IdRef="SerializeToJson_1" Object="[entity]" Result="[message]" />
+    <ccwa:Http Headers="{x:Null}" ResponseStatusCode="{x:Null}" Body="[message]" DisplayName="Invoke Azure Logic App" sap2010:WorkflowViewState.IdRef="Http_1" MediaType="application/json" Method="POST" ResponseBody="[responseBody]" Uri="https://prod-18.eastus2.logic.azure.com:443/workflows/8a9df956991f41e9816d6e19b7696651/triggers/manual/paths/invoke?api-version=2016-06-01&amp;sp=%2Ftriggers%2Fmanual%2Frun&amp;sv=1.0&amp;sig=pF2se8SI3wp_dD1Ftf5YE7c6tNgjwsNXWf4uaHx9ge0" />
+    <If Condition="[not string.IsNullOrEmpty(responseBody)]" DisplayName="If response is not empty..." sap2010:WorkflowViewState.IdRef="If_1">
+      <If.Then>
+        <ccwa:CreateValidationItem DisplayName="Create validation error" sap2010:WorkflowViewState.IdRef="CreateValidationItem_1" Message="[responseBody]" Messages="[args.ValidationMessages]" />
+      </If.Then>
+    </If>
+    <sads:DebugSymbol.Symbol>d4QBRDpcU291cmNlXGV3ZWxsbml0elxjYW1wdXMtbWFuYWdlbWVudC1zYW1wbGVzXFdvcmtmbG93c1xDbWMuTmV4dXMuQ3JtLkVudGl0aWVzLlRhc2tFbnRpdHlfU2F2aW5nRXZlbnRfU2FtcGxlIC0gQXp1cmUgTG9naWMgQXBwcy54YW1sDzcDRA4CAQE8BTyOAQIBET0FPd0DAgEJPgVCCgIBAjxuPHgCARQ8gAE8iwECARI9Rj1RAgEPPaoBPbwBAgEOPdgBPegBAgEMPe0BPdoDAgELPcQBPcoBAgEKPhM+PQIBA0AJQMMBAgEFQIsBQJsBAgEHQKUBQMABAgEG</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="SerializeToJson_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="Http_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="CreateValidationItem_1" sap:VirtualizedContainerService.HintSize="314,111" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,259" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="486,507">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Demo - Azure Logic Apps_1" sap:VirtualizedContainerService.HintSize="526,587" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
