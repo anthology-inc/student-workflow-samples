@@ -18,7 +18,7 @@ Creating custom activities for use by CampusNexus is identical to creating activ
 4. Apply any needed modifications to the Workflow
 
 ### To publish a Workflow
-1. Within the **Server** ribon section, click **Publish...**
+1. Within the **Server** ribbon section, click **Publish...**
 2. Check the **Enable this Workflow Version?** check box
 3. Click the **Publish** button
 
