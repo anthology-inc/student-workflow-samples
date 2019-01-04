@@ -1,0 +1,164 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Demo - Grade posted notify advisor or student"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:cce="clr-namespace:Cmc.Core.Eventing;assembly=Cmc.Core"
+ xmlns:ccwa="clr-namespace:Cmc.Core.Workflow.Activities;assembly=Cmc.Core.Workflow"
+ xmlns:cn="clr-namespace:Cmc.Nexus;assembly=Cmc.Nexus.Contracts"
+ xmlns:cnc="clr-namespace:Cmc.Nexus.Crm;assembly=Cmc.Nexus.Contracts"
+ xmlns:cnsa="clr-namespace:Cmc.Nexus.Sis.Academics;assembly=Cmc.Nexus.Contracts"
+ xmlns:cnw="clr-namespace:Cmc.Nexus.Workflow;assembly=Cmc.Nexus.Workflow"
+ xmlns:cnwc="clr-namespace:Cmc.Nexus.Workflow.Crm;assembly=Cmc.Nexus.Workflow"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="entity" Type="InOutArgument(cnsa:StudentCourse)" />
+    <x:Property Name="args" Type="InOutArgument(s:EventArgs)" />
+    <x:Property Name="event" Type="InOutArgument(cce:SavedEvent)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>Grade Posted and No Attendance Send Activity_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>Cmc.Core.Eventing</x:String>
+      <x:String>Cmc.Nexus.Sis.Academics</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>Cmc.Core.EntityModel</x:String>
+      <x:String>Cmc.Core.ComponentModel</x:String>
+      <x:String>Cmc.Nexus</x:String>
+      <x:String>Cmc.Nexus.Crm</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Cmc.Core</AssemblyReference>
+      <AssemblyReference>Cmc.Nexus.Contracts</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>Cmc.Nexus.CVue</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="Grade Posted and No Attendance Send Activity " sap2010:WorkflowViewState.IdRef="Sequence_2">
+    <If Condition="[entity.HasChanged(StudentCourse.GradePostedDateProperty)]" DisplayName="Check if Grade is Posted" sap2010:WorkflowViewState.IdRef="If_3">
+      <If.Then>
+        <If Condition="[entity.LetterGrade.Equals(&quot;TR&quot;)]" DisplayName="Check Letter Grade" sap2010:WorkflowViewState.IdRef="If_2">
+          <If.Then>
+            <Sequence DisplayName="Notify Advisor" sap2010:WorkflowViewState.IdRef="Sequence_6">
+              <Sequence.Variables>
+                <Variable x:TypeArguments="cn:LookupItem" Name="Advisor" />
+                <Variable x:TypeArguments="cnc:Task" Name="CmActivity" />
+              </Sequence.Variables>
+              <cnw:LookupListItem DisplayName="Assign Advisor" sap2010:WorkflowViewState.IdRef="LookupListItem_3" ItemId="1322" ListItem="[Advisor]" ListItemTypeId="1021" />
+              <cnwc:CreateTask DueDate="[Datetime.Now]" sap2010:WorkflowViewState.IdRef="CreateTask_4" Note="The student has had a transfer grade posted for a course that was currently sheduled. Please select a new course for the student." OwnerUserId="[Advisor.Id]" PersonId="[entity.PersonId]" Priority="[Cmc.Nexus.Crm.TaskPriority.High]" StartDate="[Datetime.Now]" Subject="A Transfer Grade has been posted" Task="[CmActivity]" TaskStatusId="1" TaskTypeId="243" />
+              <cnwc:SaveTask ValidationMessages="{x:Null}" sap2010:WorkflowViewState.IdRef="SaveTask_4" Task="[CmActivity]" />
+            </Sequence>
+          </If.Then>
+          <If.Else>
+            <If Condition="[entity.LastAttendanceDate.HasValue]" DisplayName="Check if no LDA" sap2010:WorkflowViewState.IdRef="If_1">
+              <If.Then>
+                <Sequence DisplayName="Send Message" sap2010:WorkflowViewState.IdRef="Sequence_5">
+                  <Sequence.Variables>
+                    <Variable x:TypeArguments="cn:Person" Name="Student" />
+                    <Variable x:TypeArguments="cn:LookupItem" Name="staff" />
+                    <Variable x:TypeArguments="x:String" Name="CourseCode" />
+                    <Variable x:TypeArguments="cnc:Task" Name="sms" />
+                  </Sequence.Variables>
+                  <cnw:LookupPerson DisplayName="Get Student Information" sap2010:WorkflowViewState.IdRef="LookupPerson_2" Person="[Student]" PersonId="[entity.PersonId]" />
+                  <cnw:LookupListItem DisplayName="Find staff to send message" sap2010:WorkflowViewState.IdRef="LookupListItem_2" ItemId="282" ListItem="[staff]" ListItemTypeId="1021" />
+                  <ccwa:ExecuteDataReader CommandText="[&quot;Select Code from AdCourse where AdCourseId = &quot; &amp; entity.CourseId]" DisplayName="Find course code" sap2010:WorkflowViewState.IdRef="ExecuteDataReader_3">
+                    <ccwa:ExecuteDataReader.Body>
+                      <ActivityAction x:TypeArguments="scg:Dictionary(x:String, x:Object)">
+                        <ActivityAction.Argument>
+                          <DelegateInArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" Name="CurrentRow" />
+                        </ActivityAction.Argument>
+                        <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+                          <Assign.To>
+                            <OutArgument x:TypeArguments="x:String">[CourseCode]</OutArgument>
+                          </Assign.To>
+                          <Assign.Value>
+                            <InArgument x:TypeArguments="x:String">[DirectCast(CurrentRow("Code"), String)]</InArgument>
+                          </Assign.Value>
+                        </Assign>
+                      </ActivityAction>
+                    </ccwa:ExecuteDataReader.Body>
+                  </ccwa:ExecuteDataReader>
+                  <cnwc:CreateTask DisplayName="Create SMS Message" DueDate="[datetime.Today.AddDays(1)]" sap2010:WorkflowViewState.IdRef="CreateTask_3" Note="[Student.FirstName + &quot; you received the grade of  &quot; + entity.LetterGrade.ToString + &quot; in &quot; + CourseCode]" OwnerUserId="[staff.Id]" PersonId="[entity.PersonId]" Priority="[Cmc.Nexus.Crm.TaskPriority.Normal]" StartDate="[datetime.Now]" Subject="A grade has been posted" Task="[sms]" TaskStatusId="1" TaskTypeId="264" />
+                  <cnwc:SaveTask ValidationMessages="{x:Null}" DisplayName="Send SMS" sap2010:WorkflowViewState.IdRef="SaveTask_3" Task="[sms]" />
+                </Sequence>
+              </If.Then>
+            </If>
+          </If.Else>
+        </If>
+      </If.Then>
+    </If>
+    <sads:DebugSymbol.Symbol>d5UBQzpcQ2FtcHVzTmV4dXNcU3RhZ2luZ1xTdGVwaGFuaWUgV29ya2Zsb3dzXFUgb2YgUFxDbWMuTmV4dXMuU2lzLkFjYWRlbWljcy5TdHVkZW50Q291cnNlX1NhdmVkRXZlbnRfRGVtbyAtIEdyYWRlIHBvc3RlZCBub3RpZnkgYWR2aXNvciBvciBzdHVkZW50LnhhbWwzPwN1DgIBAUAFcwoCAQJAE0BPAgEDQglxDgIBBEIXQkQCAQVEDUwYAgEoTw1vEgIBBkkPSa4BAgE4Sg9K1AMCASxLD0t/AgEpTxtPQQIBB1ERbRwCAQhJigFJlQECATtJpQFJqwECATpJekmAAQIBOUr9AUqLAgIBN0rgAkrwAgIBNkqyAkrVAgIBNUptSvABAgE0SpUCSqgCAgEzSvkCSpsDAgEySihKOAIBMUqhA0qvAwIBL0rMA0rRAwIBLkq9A0rAAwIBLUtuS3wCASpYE1iuAQIBJFkTWbsBAgEfWhNqLAIBGGsTa/EDAgEMbBNskwECAQlYgwFYjgECASZYmAFYqwECASVZmQFZogECASJZsgFZuAECASFZigFZjwECASBaN1qKAQIBHmAZZyICARlrqgJrtgICARdrjQNrnQMCARZr3QJrggMCARVrnwFrnQICARRrwAJr0wICARNrpgNrvwMCARJrTWtqAgERa8UDa8wDAgEPa+kDa+4DAgEOa9oDa90DAgENbIkBbJABAgEKZURlbAIBHGJFYlECARo=</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="LookupListItem_3" sap:VirtualizedContainerService.HintSize="314,108" />
+      <sap2010:ViewStateData Id="CreateTask_4" sap:VirtualizedContainerService.HintSize="314,143">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="SaveTask_4" sap:VirtualizedContainerService.HintSize="314,22" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="336,477">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LookupPerson_2" sap:VirtualizedContainerService.HintSize="364,22" />
+      <sap2010:ViewStateData Id="LookupListItem_2" sap:VirtualizedContainerService.HintSize="364,100" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,59" />
+      <sap2010:ViewStateData Id="ExecuteDataReader_3" sap:VirtualizedContainerService.HintSize="364,296" />
+      <sap2010:ViewStateData Id="CreateTask_3" sap:VirtualizedContainerService.HintSize="364,348" />
+      <sap2010:ViewStateData Id="SaveTask_3" sap:VirtualizedContainerService.HintSize="364,22" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,207" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="825,624" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="950,771" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="972,895">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Grade Posted and No Attendance Send Activity_1" sap:VirtualizedContainerService.HintSize="1012,975" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

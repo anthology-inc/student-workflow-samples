@@ -1,0 +1,200 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="CSU - Update Entrance Document to On File if Entrance Date Populated"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:av="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:cce="clr-namespace:Cmc.Core.Eventing;assembly=Cmc.Core"
+ xmlns:ccwa="clr-namespace:Cmc.Core.Workflow.Activities;assembly=Cmc.Core.Workflow"
+ xmlns:cn="clr-namespace:Cmc.Nexus;assembly=Cmc.Nexus.Contracts"
+ xmlns:cnw="clr-namespace:Cmc.Nexus.Workflow;assembly=Cmc.Nexus.Workflow"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="entity" Type="InOutArgument(cce:Schedule)" />
+    <x:Property Name="args" Type="InOutArgument(s:EventArgs)" />
+    <x:Property Name="event" Type="InOutArgument(cce:ScheduleOccurrenceEvent)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>CSU - Update Entrance Document to On File if Entrance Date Populated_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>Cmc.Core.Eventing</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+      <x:String>Cmc.Core.EntityModel</x:String>
+      <x:String>Cmc.Core.ComponentModel</x:String>
+      <x:String>Cmc.Nexus.Converters</x:String>
+      <x:String>Cmc.Nexus.Crm.Entities</x:String>
+      <x:String>Cmc.Nexus</x:String>
+      <x:String>Cmc.Nexus.Common.Services</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Cmc.Core</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>Cmc.Nexus.CVue</AssemblyReference>
+      <AssemblyReference>Cmc.Nexus.Crm.Contracts</AssemblyReference>
+      <AssemblyReference>Cmc.Nexus.Contracts</AssemblyReference>
+      <AssemblyReference>Cmc.Nexus.Common.Contracts</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Flowchart DisplayName="Update Entrance Document to On File Based on Entrance Date " sap2010:WorkflowViewState.IdRef="Flowchart_1">
+    <Flowchart.Variables>
+      <Variable x:TypeArguments="x:String" Default="Ending WF." Name="Reason" />
+      <Variable x:TypeArguments="s:DateTime" Name="EntranceDate" />
+      <Variable x:TypeArguments="x:Int32" Name="StudentID" />
+      <Variable x:TypeArguments="x:Int32" Name="person" />
+      <Variable x:TypeArguments="cn:LookupItem" Name="EntranceDoc" />
+      <Variable x:TypeArguments="cn:LookupItem" Name="DocStatus" />
+    </Flowchart.Variables>
+    <Flowchart.StartNode>
+      <FlowDecision x:Name="__ReferenceID0" Condition="[entity.Name = &quot;Entrance&quot;]" sap2010:WorkflowViewState.IdRef="FlowDecision_1">
+        <FlowDecision.True>
+          <FlowStep x:Name="__ReferenceID2" sap2010:WorkflowViewState.IdRef="FlowStep_1">
+            <Sequence DisplayName="Update Entrance Document" sap2010:WorkflowViewState.IdRef="Sequence_1">
+              <cnw:LookupListItem DisplayName="Lookup Entrance Doc" sap2010:WorkflowViewState.IdRef="LookupListItem_1" ItemId="131" ListItem="[EntranceDoc]" ListItemTypeId="1004" />
+              <cnw:LookupListItem DisplayName="Lookup Doc Status" sap2010:WorkflowViewState.IdRef="LookupListItem_2" ItemId="2" ListItem="[DocStatus]" ListItemTypeId="1003" />
+              <ccwa:ExecuteDataReader CommandText="select faentrdate, systudentid from adenroll (nolock) where faentrdate is not null" DisplayName="Find students with Entrance Date" sap2010:WorkflowViewState.IdRef="ExecuteDataReader_1">
+                <ccwa:ExecuteDataReader.Body>
+                  <ActivityAction x:TypeArguments="scg:Dictionary(x:String, x:Object)">
+                    <ActivityAction.Argument>
+                      <DelegateInArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" Name="CurrentRow" />
+                    </ActivityAction.Argument>
+                    <Sequence DisplayName="Assign Values" sap2010:WorkflowViewState.IdRef="Sequence_3">
+                      <Assign DisplayName="Assign Entrance Date" sap2010:WorkflowViewState.IdRef="Assign_1">
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="s:DateTime">[EntranceDate]</OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="s:DateTime">[DirectCast(CurrentRow("faentrdate"), datetime)]</InArgument>
+                        </Assign.Value>
+                      </Assign>
+                      <Assign DisplayName="Assign Student ID" sap2010:WorkflowViewState.IdRef="Assign_2">
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="x:Int32">[StudentID]</OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="x:Int32">[DirectCast(CurrentRow("systudentid"), Int32)]</InArgument>
+                        </Assign.Value>
+                      </Assign>
+                      <ccwa:ExecuteQuery Data="{x:Null}" CommandText="[&quot;update cmdocument set daterecv = '&quot; &amp; EntranceDate.ToString &amp;  &quot;' , cmdocstatusid = '&quot; &amp; DocStatus.Id &amp; &quot;'  where cmdoctypeid = '&quot; &amp; EntranceDoc.Id &amp; &quot;' and  cmdocstatusid &lt;&gt; '&quot; &amp; DocStatus.Id &amp; &quot;' and systudentid = &quot; &amp; StudentID]" DisplayName="Update Document" sap2010:WorkflowViewState.IdRef="ExecuteQuery_1" />
+                    </Sequence>
+                  </ActivityAction>
+                </ccwa:ExecuteDataReader.Body>
+              </ccwa:ExecuteDataReader>
+            </Sequence>
+          </FlowStep>
+        </FlowDecision.True>
+        <FlowDecision.False>
+          <FlowStep x:Name="__ReferenceID1" sap2010:WorkflowViewState.IdRef="FlowStep_2">
+            <Sequence DisplayName="End WF" sap2010:WorkflowViewState.IdRef="Sequence_2">
+              <ccwa:LogLine DisplayName="Log Ending WF" sap2010:WorkflowViewState.IdRef="LogLine_1" Text="[environment.NewLine + Reason + Environment.NewLine]" />
+              <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1" Reason="[Reason]" />
+            </Sequence>
+          </FlowStep>
+        </FlowDecision.False>
+      </FlowDecision>
+    </Flowchart.StartNode>
+    <x:Reference>__ReferenceID0</x:Reference>
+    <x:Reference>__ReferenceID1</x:Reference>
+    <x:Reference>__ReferenceID2</x:Reference>
+    <sads:DebugSymbol.Symbol>d7MBQzpcQ2FtcHVzTmV4dXNcU3RhZ2luZ1xTdGVwaGFuaWUgYW5kIFJheSBXb3JrZmxvd3NcQ1NVXENtYy5Db3JlLkV2ZW50aW5nLlNjaGVkdWxlX1NjaGVkdWxlT2NjdXJyZW5jZUV2ZW50X0NTVSAtIFVwZGF0ZSBFbnRyYW5jZSBEb2N1bWVudCB0byBPbiBGaWxlIGlmIEVudHJhbmNlIERhdGUgUG9wdWxhdGVkLnhhbWwcQgN/DwIBAUQ0REACAQJMN0xdAgEhcw12GAIBG08NbhgCAQN0D3SjAQIBH3UPdWwCARxQD1C2AQIBFlEPUbABAgERUg9tKAIBBHRqdKABAgEgdV91aQIBHVCOAVCdAQIBGVCtAVCzAQIBGFB/UIQBAgEXUYoBUZcBAgEUUacBUa0BAgETUX1RgAECARJSM1KHAQIBEFgVaiACAQVZF2AgAgEMYRdoIAIBCGkXad4DAgEGXkRedAIBD1tFW1MCAQ1mQWZvAgELY0JjTQIBCWlGaYwDAgEH</sads:DebugSymbol.Symbol>
+  </Flowchart>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="LookupListItem_1" sap:VirtualizedContainerService.HintSize="461,108" />
+      <sap2010:ViewStateData Id="LookupListItem_2" sap:VirtualizedContainerService.HintSize="461,108" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="ExecuteQuery_1" sap:VirtualizedContainerService.HintSize="242,114" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="264,438">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ExecuteDataReader_1" sap:VirtualizedContainerService.HintSize="461,640" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="483,1060">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_1">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">5,225.02</av:Point>
+            <av:Size x:Key="ShapeSize">200,51</av:Size>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogLine_1" sap:VirtualizedContainerService.HintSize="214,111" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="214,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_2">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">475,215.02</av:Point>
+            <av:Size x:Key="ShapeSize">200,51</av:Size>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowDecision_1" sap:VirtualizedContainerService.HintSize="70,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <av:Point x:Key="ShapeLocation">265,127.5</av:Point>
+            <av:Size x:Key="ShapeSize">70,87</av:Size>
+            <av:PointCollection x:Key="FalseConnector">335,171 365,171 365,240.52 475,240.52</av:PointCollection>
+            <av:PointCollection x:Key="TrueConnector">265,171 235,171 235,250.52 205,250.52</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Flowchart_1" sap:VirtualizedContainerService.HintSize="689,636">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <av:Point x:Key="ShapeLocation">270,2.5</av:Point>
+            <av:Size x:Key="ShapeSize">60,75</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">300,77.5 300,127.5</av:PointCollection>
+            <x:Double x:Key="Width">675</x:Double>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CSU - Update Entrance Document to On File if Entrance Date Populated_1" sap:VirtualizedContainerService.HintSize="729,716" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
