@@ -1,0 +1,117 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Notify athletics of Extra Curricular sport"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:cce="clr-namespace:Cmc.Core.Eventing;assembly=Cmc.Core"
+ xmlns:cn="clr-namespace:Cmc.Nexus;assembly=Cmc.Nexus.Contracts"
+ xmlns:cnc="clr-namespace:Cmc.Nexus.Crm;assembly=Cmc.Nexus.Contracts"
+ xmlns:cnc1="clr-namespace:Cmc.Nexus.Converters;assembly=Cmc.Nexus.CVue"
+ xmlns:cnw="clr-namespace:Cmc.Nexus.Workflow;assembly=Cmc.Nexus.Workflow"
+ xmlns:cnwc="clr-namespace:Cmc.Nexus.Workflow.Crm;assembly=Cmc.Nexus.Workflow"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="entity" Type="InOutArgument(cn:Person)" />
+    <x:Property Name="args" Type="InOutArgument(s:EventArgs)" />
+    <x:Property Name="event" Type="InOutArgument(cce:SavedEvent)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>Notify athletics of Extra Curricular sport_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>Cmc.Core.Eventing</x:String>
+      <x:String>Cmc.Nexus</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>Cmc.Core.EntityModel</x:String>
+      <x:String>Cmc.Core.ComponentModel</x:String>
+      <x:String>Cmc.Nexus.Sis</x:String>
+      <x:String>Cmc.Nexus.Crm</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Cmc.Core</AssemblyReference>
+      <AssemblyReference>Cmc.Nexus.Contracts</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>Cmc.Nexus.CVue</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="cn:LookupItem" Name="GenderMale" />
+      <Variable x:TypeArguments="cn:LookupItem" Name="GenderFemale" />
+      <Variable x:TypeArguments="cn:LookupItem" Name="Sport" />
+      <Variable x:TypeArguments="cn:LookupItem" Name="MaleCoach" />
+      <Variable x:TypeArguments="cn:LookupItem" Name="FemaleCoach" />
+      <Variable x:TypeArguments="x:Int32" Name="Stud" />
+    </Sequence.Variables>
+    <cnw:LookupListItem DisplayName="GenderMale" sap2010:WorkflowViewState.IdRef="LookupListItem_1" ItemId="6" ListItem="[GenderMale]" ListItemTypeId="1012" />
+    <cnw:LookupListItem DisplayName="GenderFemale" sap2010:WorkflowViewState.IdRef="LookupListItem_2" ItemId="5" ListItem="[GenderFemale]" ListItemTypeId="1012" />
+    <cnw:LookupListItem DisplayName="Sport" sap2010:WorkflowViewState.IdRef="LookupListItem_3" ItemId="9" ListItem="[Sport]" ListItemTypeId="4003" />
+    <cnw:LookupListItem DisplayName="MaleCoach" sap2010:WorkflowViewState.IdRef="LookupListItem_4" ItemId="1802" ListItem="[MaleCoach]" ListItemTypeId="1021" />
+    <cnw:LookupListItem DisplayName="FemaleCoach" sap2010:WorkflowViewState.IdRef="LookupListItem_5" ItemId="1802" ListItem="[FemaleCoach]" ListItemTypeId="1021" />
+    <If Condition="[entity.Interests(0).Id=Sport.Id AND entity.Gender.id=GenderMale.Id AND entity.Interests(0).HasChanged]" sap2010:WorkflowViewState.IdRef="If_1">
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="cnc:Task" Name="SaveActivity" />
+          </Sequence.Variables>
+          <cnc1:PersonIdToCVueIdActivity CVueId="[entity.Students(0).Id]" sap2010:WorkflowViewState.IdRef="PersonIdToCVueIdActivity_1" PersonId="[Stud]" />
+          <cnwc:CreateTask Note="{x:Null}" DueDate="[system.DateTime.Now]" sap2010:WorkflowViewState.IdRef="CreateTask_2" OwnerUserId="[MaleCoach.Id]" PersonId="[Stud]" Priority="[Cmc.Nexus.Crm.TaskPriority.Normal]" StartDate="[system.DateTime.Now]" Subject="New Athlete - Male" Task="[SaveActivity]" TaskStatusId="1" TaskTypeId="929" />
+          <cnwc:SaveTask ValidationMessages="{x:Null}" Task="[SaveActivity]" sap2010:WorkflowViewState.IdRef="SaveTask_1" />
+        </Sequence>
+      </If.Then>
+    </If>
+    <sads:DebugSymbol.Symbol>d2JDOlxDYW1wdXNOZXh1c1dvcmtGbG93XENtYy5OZXh1cy5QZXJzb25fU2F2ZWRFdmVudF9Ob3RpZnkgYXRobGV0aWNzIG9mIEV4dHJhIEN1cnJpY3VsYXIgc3BvcnQueGFtbCc9A1gOAgEBRgVGoAECASxHBUekAQIBJ0gFSJYBAgEiSQVJoQECAR1KBUqlAQIBGEsFVgoCAQJGeUaHAQIBL0aXAUadAQIBLkZsRm8CAS1He0eLAQIBKkebAUehAQIBKUduR3ECAShIdEh9AgElSI0BSJMBAgEkSGdIagIBI0l7SYgBAgEgSZgBSZ4BAgEfSWtJcQIBHkp9SowBAgEbSpwBSqIBAgEaSm1KcwIBGUsTS3wCAQNNCVQUAgEEUQtRnAECARRSC1LSAgIBCFMLU30CAQVRkQFRmQECARZRMVFKAgEVUocBUpcBAgETUuMBUvoBAgESUrMBUtgBAgERUqEBUqkBAgEPUoMCUpcCAgEOUjRSSwIBDVKdAlKtAgIBC1LKAlLPAgIBClK7AlK+AgIBCVM9U00CAQY=</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="LookupListItem_1" sap:VirtualizedContainerService.HintSize="464,100" />
+      <sap2010:ViewStateData Id="LookupListItem_2" sap:VirtualizedContainerService.HintSize="464,100" />
+      <sap2010:ViewStateData Id="LookupListItem_3" sap:VirtualizedContainerService.HintSize="464,100" />
+      <sap2010:ViewStateData Id="LookupListItem_4" sap:VirtualizedContainerService.HintSize="464,100" />
+      <sap2010:ViewStateData Id="LookupListItem_5" sap:VirtualizedContainerService.HintSize="464,100" />
+      <sap2010:ViewStateData Id="PersonIdToCVueIdActivity_1" sap:VirtualizedContainerService.HintSize="314,22" />
+      <sap2010:ViewStateData Id="CreateTask_2" sap:VirtualizedContainerService.HintSize="314,348" />
+      <sap2010:ViewStateData Id="SaveTask_1" sap:VirtualizedContainerService.HintSize="314,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="336,596">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,739" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="486,1563">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Notify athletics of Extra Curricular sport_1" sap:VirtualizedContainerService.HintSize="526,1643" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

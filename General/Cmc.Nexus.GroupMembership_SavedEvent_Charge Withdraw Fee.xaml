@@ -1,0 +1,117 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Charge Withdraw Fee"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:cce="clr-namespace:Cmc.Core.Eventing;assembly=Cmc.Core"
+ xmlns:cn="clr-namespace:Cmc.Nexus;assembly=Cmc.Nexus.Contracts"
+ xmlns:cnc="clr-namespace:Cmc.Nexus.Converters;assembly=Cmc.Nexus.CVue"
+ xmlns:cnsa="clr-namespace:Cmc.Nexus.Sis.Academics;assembly=Cmc.Nexus.Contracts"
+ xmlns:cnss="clr-namespace:Cmc.Nexus.Sis.StudentAccounts;assembly=Cmc.Nexus.Contracts"
+ xmlns:cnw="clr-namespace:Cmc.Nexus.Workflow;assembly=Cmc.Nexus.Workflow"
+ xmlns:cnwsa="clr-namespace:Cmc.Nexus.Workflow.Sis.Academics;assembly=Cmc.Nexus.Workflow"
+ xmlns:cnwss="clr-namespace:Cmc.Nexus.Workflow.Sis.StudentAccounts;assembly=Cmc.Nexus.Workflow"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="entity" Type="InOutArgument(cn:GroupMembership)" />
+    <x:Property Name="args" Type="InOutArgument(s:EventArgs)" />
+    <x:Property Name="event" Type="InOutArgument(cce:SavedEvent)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>Charge Add-Drop Fee_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>Cmc.Core.Eventing</x:String>
+      <x:String>Cmc.Nexus</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>Cmc.Core.EntityModel</x:String>
+      <x:String>Cmc.Core.ComponentModel</x:String>
+      <x:String>Cmc.Nexus.Sis.StudentAccounts</x:String>
+      <x:String>Cmc.Nexus.Converters</x:String>
+      <x:String>Cmc.CampusLink.Academics.Custom</x:String>
+      <x:String>Cmc.Nexus.Sis.Academics</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Cmc.Core</AssemblyReference>
+      <AssemblyReference>Cmc.Nexus.Contracts</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>Cmc.Nexus.CVue</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>Cmc.CampusLink.BusinessEntities</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="Charge Add/Drop Fee" sap2010:WorkflowViewState.IdRef="Sequence_2">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="cn:Group" Name="addedgroup" />
+      <Variable x:TypeArguments="x:Int32" Name="stud" />
+      <Variable x:TypeArguments="cn:LookupItem" Name="user" />
+    </Sequence.Variables>
+    <cnw:LookupGroup Group="[addedgroup]" GroupId="351" sap2010:WorkflowViewState.IdRef="LookupGroup_1" />
+    <If Condition="[entity.GroupId = addedgroup.Id and entity.HasChanged(&quot;AddedDate&quot;)]" DisplayName="If Student is added to a group" sap2010:WorkflowViewState.IdRef="If_1">
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="cnss:AccountChargeTransaction" Name="charge" />
+            <Variable x:TypeArguments="cnsa:StudentEnrollmentPeriod" Name="enrollperiod" />
+            <Variable x:TypeArguments="x:Int32" Name="staff" />
+          </Sequence.Variables>
+          <cnc:PersonIdToCVueIdActivity CVueId="[stud]" sap2010:WorkflowViewState.IdRef="PersonIdToCVueIdActivity_1" PersonId="[entity.PersonId.Value]" />
+          <cnwsa:LookupCurrentEnrollmentPeriod EnrollmentPeriod="[enrollperiod]" sap2010:WorkflowViewState.IdRef="LookupCurrentEnrollmentPeriod_1" StudentId="[stud]" />
+          <cnwss:CreateCharge Reference="{x:Null}" Amount="[15]" ChargeCodeId="21" ChargeTransaction="[charge]" Description="Withdraw Fee" sap2010:WorkflowViewState.IdRef="CreateCharge_1" PersonId="[entity.PersonId.Value]" PostDate="[system.DateTime.Now]" ProspectId="[stud]" StudentEnrollmentPeriodId="[enrollperiod.Id]" TransactionDate="[system.DateTime.Now]" Type="[Cmc.Nexus.Sis.StudentAccounts.TransactionType.DebitAdjustment]" />
+          <cnwss:SaveCharge ValidationMessages="{x:Null}" ChargeTransaction="[charge]" sap2010:WorkflowViewState.IdRef="SaveCharge_1" />
+          <cnw:ManageGroupMembership Action="[Cmc.Nexus.Workflow.GroupAction.RemoveFromGroup]" GroupId="[addedgroup.Id]" sap2010:WorkflowViewState.IdRef="ManageGroupMembership_1" PersonId="[entity.PersonId.Value]" UserId="[entity.AddedUserId]" />
+        </Sequence>
+      </If.Then>
+    </If>
+    <sads:DebugSymbol.Symbol>d2xDOlxDYW1wdXNOZXh1c1xTdGFnaW5nXFN0ZXBoYW5pZSBXb3JrZmxvd3NcTEJDXENtYy5OZXh1cy5Hcm91cE1lbWJlcnNoaXBfU2F2ZWRFdmVudF9DaGFyZ2UgV2l0aGRyYXcgRmVlLnhhbWwfQgNaDgIBAUgFSGsCASNJBVgKAgECSBxIKgIBJUgzSDgCASRJE0liAgEDSwlWFAIBBFELUZsBAgEfUgtSqQECARpTC1O0AwIBDVQLVIkBAgEKVQtV9wECAQVRf1GYAQIBIlEwUTgCASBSQVJRAgEdUp4BUqYBAgEbU68CU8ICAgEZU+kBU4ACAgEYU31TiwECARdTxgFT3wECARZTT1NTAgEVU4wCU5QCAgETU2ZTcAIBEVPwAlOxAwIBEFPTAlPqAgIBD1M7U0ECAQ5UTVRXAgELVS1VXwIBCVW9AVXWAQIBCFVoVXkCAQdV3gFV9AECAQY=</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="LookupGroup_1" sap:VirtualizedContainerService.HintSize="464,126" />
+      <sap2010:ViewStateData Id="PersonIdToCVueIdActivity_1" sap:VirtualizedContainerService.HintSize="314,22" />
+      <sap2010:ViewStateData Id="LookupCurrentEnrollmentPeriod_1" sap:VirtualizedContainerService.HintSize="314,22" />
+      <sap2010:ViewStateData Id="CreateCharge_1" sap:VirtualizedContainerService.HintSize="314,420" />
+      <sap2010:ViewStateData Id="SaveCharge_1" sap:VirtualizedContainerService.HintSize="314,22" />
+      <sap2010:ViewStateData Id="ManageGroupMembership_1" sap:VirtualizedContainerService.HintSize="314,150" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="336,920">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,1068" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="486,1358">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Charge Add-Drop Fee_1" sap:VirtualizedContainerService.HintSize="526,1438" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

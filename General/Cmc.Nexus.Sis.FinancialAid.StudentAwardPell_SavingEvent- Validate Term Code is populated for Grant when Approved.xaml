@@ -1,0 +1,235 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="PIMA - Validate Term Code is populated for Grant when Approved"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:av="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:cce="clr-namespace:Cmc.Core.Eventing;assembly=Cmc.Core"
+ xmlns:ccwa="clr-namespace:Cmc.Core.Workflow.Activities;assembly=Cmc.Core.Workflow"
+ xmlns:cnsf="clr-namespace:Cmc.Nexus.Sis.FinancialAid;assembly=Cmc.Nexus.Contracts"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="entity" Type="InOutArgument(cnsf:StudentAwardPell)" />
+    <x:Property Name="args" Type="InOutArgument(cce:ValidationEventArgs)" />
+    <x:Property Name="event" Type="InOutArgument(cce:SavingEvent)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>PIMA - Validate Term Code is populated for Grant when Approved_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>Cmc.Core.Eventing</x:String>
+      <x:String>Cmc.Nexus.Sis.FinancialAid</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>Cmc.Core.EntityModel</x:String>
+      <x:String>Cmc.Core.ComponentModel</x:String>
+      <x:String>Cmc.Core.Serialization</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Cmc.Core</AssemblyReference>
+      <AssemblyReference>Cmc.Nexus.Contracts</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>Cmc.Core.NetFramework</AssemblyReference>
+      <AssemblyReference>DevExpress.Data.v14.1</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Flowchart DisplayName="Validate Term Code is populated for Disbursment" sap2010:WorkflowViewState.IdRef="Flowchart_1">
+    <Flowchart.Variables>
+      <Variable x:TypeArguments="x:String" Name="Status" />
+      <Variable x:TypeArguments="x:Int32" Name="DisbCount" />
+    </Flowchart.Variables>
+    <Flowchart.StartNode>
+      <FlowStep x:Name="__ReferenceID1" sap2010:WorkflowViewState.IdRef="FlowStep_5">
+        <Sequence DisplayName="Assign Values " sap2010:WorkflowViewState.IdRef="Sequence_6">
+          <Assign DisplayName="Assign Approved Status" sap2010:WorkflowViewState.IdRef="Assign_1">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:String">[Status]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[Entity.Status.ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <ccwa:LogLine DisplayName="Log Status" sap2010:WorkflowViewState.IdRef="LogLine_6" Text="[environment.NewLine + Environment.NewLine + &quot;The status of the grant is:  &quot; + entity.Status.ToString + Environment.NewLine]" />
+        </Sequence>
+        <FlowStep.Next>
+          <FlowDecision x:Name="__ReferenceID2" Condition="[Status = &quot;Approved&quot;]" sap2010:WorkflowViewState.IdRef="FlowDecision_3">
+            <FlowDecision.True>
+              <FlowStep x:Name="__ReferenceID3" sap2010:WorkflowViewState.IdRef="FlowStep_7">
+                <Sequence DisplayName="Check All Disbursements for Term Code " sap2010:WorkflowViewState.IdRef="Sequence_8">
+                  <ccwa:LogLine sap2010:WorkflowViewState.IdRef="LogLine_8" Text="[Environment.NewLine +Environment.NewLine +Entity.ScheduledDisbursements.Count.ToString]" />
+                  <ForEach x:TypeArguments="cnsf:StudentAwardScheduledDisbursement" DisplayName="ForEach&lt;StudentAwardScheduledDisbursement&gt;" sap2010:WorkflowViewState.IdRef="ForEach`1_4" Values="[Entity.ScheduledDisbursements]">
+                    <ActivityAction x:TypeArguments="cnsf:StudentAwardScheduledDisbursement">
+                      <ActivityAction.Argument>
+                        <DelegateInArgument x:TypeArguments="cnsf:StudentAwardScheduledDisbursement" Name="item" />
+                      </ActivityAction.Argument>
+                      <If Condition="[item.StudentAcademicYearPaymentPeriod.PaymentPeriod.TermId.HasValue = False or string.IsNullOrEmpty(item.StudentAcademicYearPaymentPeriod.PaymentPeriod.TermId.GetValueOrDefault.ToString)]" sap2010:WorkflowViewState.IdRef="If_6">
+                        <If.Then>
+                          <Sequence DisplayName="Send Validation Message to User" sap2010:WorkflowViewState.IdRef="Sequence_10">
+                            <ccwa:CreateValidationItem sap2010:WorkflowViewState.IdRef="CreateValidationItem_8" Message="There is no term code assigned for one or more disbursements.  Please add a valid term code." Messages="[args.ValidationMessages]" />
+                          </Sequence>
+                        </If.Then>
+                        <If.Else>
+                          <If Condition="[item.StudentAcademicYearPaymentPeriod.PaymentPeriod.TermId.Value  = 0]" sap2010:WorkflowViewState.IdRef="If_5">
+                            <If.Then>
+                              <Sequence DisplayName="Send Validation Message to User" sap2010:WorkflowViewState.IdRef="Sequence_11">
+                                <ccwa:CreateValidationItem sap2010:WorkflowViewState.IdRef="CreateValidationItem_9" Message="There is no term code assigned for one or more disbursements.  Please add a valid term code." Messages="[args.ValidationMessages]" />
+                              </Sequence>
+                            </If.Then>
+                            <If.Else>
+                              <ccwa:LogLine sap2010:WorkflowViewState.IdRef="LogLine_14" Text="[Environment.NewLine +Environment.NewLine +&quot;All of the Disbursements have Term Codes assigned&quot; + Environment.NewLine + item.StudentAcademicYearPaymentPeriod.PaymentPeriod.TermId.Value.ToString + Environment.NewLine]" />
+                            </If.Else>
+                          </If>
+                        </If.Else>
+                      </If>
+                    </ActivityAction>
+                  </ForEach>
+                </Sequence>
+              </FlowStep>
+            </FlowDecision.True>
+            <FlowDecision.False>
+              <FlowStep x:Name="__ReferenceID0" sap2010:WorkflowViewState.IdRef="FlowStep_3">
+                <Sequence DisplayName="End WF" sap2010:WorkflowViewState.IdRef="Sequence_3">
+                  <Sequence.Variables>
+                    <Variable x:TypeArguments="x:String" Default="The status of the grant is not approved.  Ending WF." Name="Reason" />
+                  </Sequence.Variables>
+                  <ccwa:LogLine DisplayName="Log Ending WF" sap2010:WorkflowViewState.IdRef="LogLine_3" Text="[environment.NewLine + Environment.NewLine + Reason + Environment.NewLine + Environment.NewLine + &quot;The status of the grant is:  &quot; + entity.Status.ToString + Environment.NewLine]" />
+                  <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1" Reason="[Reason]" />
+                </Sequence>
+              </FlowStep>
+            </FlowDecision.False>
+          </FlowDecision>
+        </FlowStep.Next>
+      </FlowStep>
+    </Flowchart.StartNode>
+    <x:Reference>__ReferenceID0</x:Reference>
+    <x:Reference>__ReferenceID1</x:Reference>
+    <x:Reference>__ReferenceID2</x:Reference>
+    <x:Reference>__ReferenceID3</x:Reference>
+    <sads:DebugSymbol.Symbol>d4wBQzpcQ2FtcHVzTmV4dXNXRlxDbWMuTmV4dXMuU2lzLkZpbmFuY2lhbEFpZC5TdHVkZW50QXdhcmRQZWxsX1NhdmluZ0V2ZW50X1BJTUEgLSBWYWxpZGF0ZSBUZXJtIENvZGUgaXMgcG9wdWxhdGVkIGZvciBHcmFudCB3aGVuIEFwcHJvdmVkLnhhbWwhPwOIAQ8CAQFGCVAUAgEeUjtSXAIBHHYRfBwCARVVEXEcAgECRwtOFAIBIU8LT+4BAgEfeEJ4eAIBFnoTeq4CAgEaexN7cAIBF1YTVq8BAgETVxNwHQIBA0w2TE4CASRJN0k/AgEiT2NP6wECASB6bnqrAgIBG3tje20CARhWUlasAQIBFFfJAVfqAQIBElwXbhwCAQRcJVzjAQIBBV4bYCYCAQ5jG2wgAgEGXx1f/wECAQ9jKWNyAgEHZR9nKgIBCmofasUCAgEIX3lf1wECARFf4QFf/AECARBmIWaDAgIBC2pfasICAgEJZn1m2wECAQ1m5QFmgAICAQw=</sads:DebugSymbol.Symbol>
+  </Flowchart>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,59" />
+      <sap2010:ViewStateData Id="LogLine_6" sap:VirtualizedContainerService.HintSize="242,104" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="200,49">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogLine_8" sap:VirtualizedContainerService.HintSize="966,104" />
+      <sap2010:ViewStateData Id="CreateValidationItem_8" sap:VirtualizedContainerService.HintSize="314,104" />
+      <sap2010:ViewStateData Id="Sequence_10" sap:VirtualizedContainerService.HintSize="336,228">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CreateValidationItem_9" sap:VirtualizedContainerService.HintSize="314,104" />
+      <sap2010:ViewStateData Id="Sequence_11" sap:VirtualizedContainerService.HintSize="336,228">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogLine_14" sap:VirtualizedContainerService.HintSize="214,104" />
+      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="575,371" />
+      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="936,514" />
+      <sap2010:ViewStateData Id="ForEach`1_4" sap:VirtualizedContainerService.HintSize="966,659" />
+      <sap2010:ViewStateData Id="Sequence_8" sap:VirtualizedContainerService.HintSize="988,927">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_7">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">125,364.5</av:Point>
+            <av:Size x:Key="ShapeSize">200,49</av:Size>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogLine_3" sap:VirtualizedContainerService.HintSize="214,104" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="214,22" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="200,49">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_3">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">560,364.5</av:Point>
+            <av:Size x:Key="ShapeSize">200,49</av:Size>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowDecision_3" sap:VirtualizedContainerService.HintSize="70,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <av:Point x:Key="ShapeLocation">415,256.5</av:Point>
+            <av:Size x:Key="ShapeSize">70,87</av:Size>
+            <av:PointCollection x:Key="TrueConnector">415,300 225,300 225,364.5</av:PointCollection>
+            <av:PointCollection x:Key="FalseConnector">485,300 660,300 660,364.5</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_5">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">350,154.5</av:Point>
+            <av:Size x:Key="ShapeSize">200,49</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">450,203.5 450,256.5</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Flowchart_1" sap:VirtualizedContainerService.HintSize="974,636">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <av:Point x:Key="ShapeLocation">420,52.5</av:Point>
+            <av:Size x:Key="ShapeSize">60,75</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">450,127.5 450,154.5</av:PointCollection>
+            <x:Double x:Key="Width">960</x:Double>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="PIMA - Validate Term Code is populated for Grant when Approved_1" sap:VirtualizedContainerService.HintSize="1014,716" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

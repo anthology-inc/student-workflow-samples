@@ -1,0 +1,593 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="PIMA - GPA Notifications"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:av="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:cce="clr-namespace:Cmc.Core.Eventing;assembly=Cmc.Core"
+ xmlns:ccwa="clr-namespace:Cmc.Core.Workflow.Activities;assembly=Cmc.Core.Workflow"
+ xmlns:cn="clr-namespace:Cmc.Nexus;assembly=Cmc.Nexus.Contracts"
+ xmlns:cnsa="clr-namespace:Cmc.Nexus.Sis.Academics;assembly=Cmc.Nexus.Contracts"
+ xmlns:cnw="clr-namespace:Cmc.Nexus.Workflow;assembly=Cmc.Nexus.Workflow"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="entity" Type="InOutArgument(cnsa:StudentCourse)" />
+    <x:Property Name="args" Type="InOutArgument(s:EventArgs)" />
+    <x:Property Name="event" Type="InOutArgument(cce:SavedEvent)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>PIMA - GPA Notifications_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Cmc.Core.Eventing</x:String>
+      <x:String>Cmc.Nexus.Sis.Academics</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>Cmc.Core.EntityModel</x:String>
+      <x:String>Cmc.Core.ComponentModel</x:String>
+      <x:String>Cmc.Nexus.Converters</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Cmc.Core</AssemblyReference>
+      <AssemblyReference>Cmc.Nexus.Contracts</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+      <AssemblyReference>Cmc.Nexus.CVue</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Flowchart DisplayName="GPA Notifications" sap2010:WorkflowViewState.IdRef="Flowchart_1">
+    <Flowchart.Variables>
+      <Variable x:TypeArguments="x:Decimal" Name="GPA" />
+      <Variable x:TypeArguments="x:String" Default="Ending WF.  This is not the WF we are looking for." Name="Reason" />
+      <Variable x:TypeArguments="cn:Group" Name="RedZoneGroup" />
+      <Variable x:TypeArguments="cn:Group" Name="YellowZoneGroup" />
+      <Variable x:TypeArguments="x:Int32" Name="adenrollid" />
+      <Variable x:TypeArguments="x:Boolean" Default="False" Name="InYellowGrp" />
+      <Variable x:TypeArguments="x:Boolean" Default="False" Name="InRedGrp" />
+    </Flowchart.Variables>
+    <Flowchart.StartNode>
+      <FlowDecision x:Name="__ReferenceID4" Condition="[entity.HasChanged(studentcourse.GradePostedDateProperty)]" DisplayName="Grade Posted?" sap2010:WorkflowViewState.IdRef="FlowDecision_3">
+        <FlowDecision.True>
+          <FlowStep x:Name="__ReferenceID5" sap2010:WorkflowViewState.IdRef="FlowStep_5">
+            <Sequence DisplayName="Query GPA and assign Values" sap2010:WorkflowViewState.IdRef="Sequence_2">
+              <ccwa:LogLine DisplayName="Beginning WF" sap2010:WorkflowViewState.IdRef="LogLine_1" Text="[environment.NewLine + Environment.NewLine + &quot;*****BEGINNING GPA NOTIFICATIONS WF****&quot; + Environment.NewLine + Environment.NewLine]" />
+              <ccwa:ExecuteDataReader CommandText="[&quot;select adenrollid from adenrollsched where adenrollschedid = &quot; &amp; entity.Id]" DisplayName="Find Adenroll ID" sap2010:WorkflowViewState.IdRef="ExecuteDataReader_2">
+                <ccwa:ExecuteDataReader.Body>
+                  <ActivityAction x:TypeArguments="scg:Dictionary(x:String, x:Object)">
+                    <ActivityAction.Argument>
+                      <DelegateInArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" Name="CurrentRow" />
+                    </ActivityAction.Argument>
+                    <Sequence DisplayName="Assign Values" sap2010:WorkflowViewState.IdRef="Sequence_6">
+                      <Assign DisplayName="Assign adenrollid" sap2010:WorkflowViewState.IdRef="Assign_3">
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="x:Int32">[adenrollid]</OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="x:Int32">[DirectCast(CurrentRow("adenrollid"), Int32)]</InArgument>
+                        </Assign.Value>
+                      </Assign>
+                    </Sequence>
+                  </ActivityAction>
+                </ccwa:ExecuteDataReader.Body>
+              </ccwa:ExecuteDataReader>
+              <ccwa:ExecuteDataReader CommandText="[&quot;select (CONVERT(DECIMAL(8,2),GPA)) as GPA from adenroll where adenrollid =&quot; &amp; adenrollid]" DisplayName="Find GPA for active students" sap2010:WorkflowViewState.IdRef="ExecuteDataReader_1">
+                <ccwa:ExecuteDataReader.Body>
+                  <ActivityAction x:TypeArguments="scg:Dictionary(x:String, x:Object)">
+                    <ActivityAction.Argument>
+                      <DelegateInArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" Name="CurrentRow" />
+                    </ActivityAction.Argument>
+                    <Sequence DisplayName="Assign Values" sap2010:WorkflowViewState.IdRef="Sequence_1">
+                      <Assign DisplayName="Assign GPA" sap2010:WorkflowViewState.IdRef="Assign_1">
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="x:Decimal">[GPA]</OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="x:Decimal">[DirectCast(CurrentRow("GPA"), decimal)]</InArgument>
+                        </Assign.Value>
+                      </Assign>
+                      <ccwa:LogLine DisplayName="Log values" sap2010:WorkflowViewState.IdRef="LogLine_2" Text="[environment.NewLine + &quot;The GPA for the following students:  &quot; +entity.StudentId.ToString + &quot;  is:  &quot; + GPA.ToString + Environment.NewLine + Environment.NewLine]" />
+                    </Sequence>
+                  </ActivityAction>
+                </ccwa:ExecuteDataReader.Body>
+              </ccwa:ExecuteDataReader>
+            </Sequence>
+            <FlowStep.Next>
+              <FlowDecision x:Name="__ReferenceID9" Condition="[GPA &lt;&gt; 0.00]" DisplayName="GPA &lt;&gt; 0" sap2010:WorkflowViewState.IdRef="FlowDecision_4">
+                <FlowDecision.True>
+                  <FlowDecision x:Name="__ReferenceID6" Condition="[GPA &lt; 2.00]" DisplayName="GPA &lt; 2.00?" sap2010:WorkflowViewState.IdRef="FlowDecision_2">
+                    <FlowDecision.True>
+                      <FlowStep x:Name="__ReferenceID8" sap2010:WorkflowViewState.IdRef="FlowStep_1">
+                        <Sequence DisplayName="Check to see if in Yellow Group" sap2010:WorkflowViewState.IdRef="Sequence_3">
+                          <ccwa:ExecuteDataReader CommandText="[&quot;select sygroupsid from SyStudGrp where sygroupsid = 33011 and dateoff is null and systudentid =&quot; &amp; entity.StudentId.ToString]" DisplayName="Is student in yellow group" sap2010:WorkflowViewState.IdRef="ExecuteDataReader_3">
+                            <ccwa:ExecuteDataReader.Body>
+                              <ActivityAction x:TypeArguments="scg:Dictionary(x:String, x:Object)">
+                                <ActivityAction.Argument>
+                                  <DelegateInArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" Name="CurrentRow" />
+                                </ActivityAction.Argument>
+                                <Assign sap2010:WorkflowViewState.IdRef="Assign_4">
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="x:Boolean">[InYellowGrp]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                                  </Assign.Value>
+                                </Assign>
+                              </ActivityAction>
+                            </ccwa:ExecuteDataReader.Body>
+                          </ccwa:ExecuteDataReader>
+                        </Sequence>
+                        <FlowStep.Next>
+                          <FlowDecision x:Name="__ReferenceID10" Condition="[InYellowGrp = True]" DisplayName="In Yellow Group?" sap2010:WorkflowViewState.IdRef="FlowDecision_5">
+                            <FlowDecision.True>
+                              <FlowStep x:Name="__ReferenceID11" sap2010:WorkflowViewState.IdRef="FlowStep_7">
+                                <Sequence DisplayName="Remove from Yellow Zone Group" sap2010:WorkflowViewState.IdRef="Sequence_7">
+                                  <cnw:LookupGroup DisplayName="Find GPA Warning Yellow Zone Group" Group="[YellowZoneGroup]" GroupId="330111" sap2010:WorkflowViewState.IdRef="LookupGroup_3" />
+                                  <cnw:ManageGroupMembership Action="[Cmc.Nexus.Workflow.GroupAction.RemoveFromGroup]" DisplayName="Remove to Yellow Zone Group" GroupId="[YellowZoneGroup.Id]" sap2010:WorkflowViewState.IdRef="ManageGroupMembership_3" PersonId="[entity.PersonId]" UserId="2" />
+                                  <ccwa:LogLine DisplayName="Log Remove from Yellow Zone Group" sap2010:WorkflowViewState.IdRef="LogLine_6" Text="[environment.NewLine + Environment.NewLine + &quot;The following students were removed form the Yellow  Zone Group:  &quot; + entity.StudentId.ToString + Environment.NewLine + Environment.NewLine]" />
+                                </Sequence>
+                                <FlowStep.Next>
+                                  <FlowStep x:Name="__ReferenceID0" sap2010:WorkflowViewState.IdRef="FlowStep_6">
+                                    <Sequence DisplayName="Add to Red Zone Group" sap2010:WorkflowViewState.IdRef="Sequence_8">
+                                      <cnw:LookupGroup DisplayName="Find GPA Warning Red Zone Group" Group="[RedZoneGroup]" GroupId="330101" sap2010:WorkflowViewState.IdRef="LookupGroup_4" />
+                                      <cnw:ManageGroupMembership Action="[Cmc.Nexus.Workflow.GroupAction.AddToGroup]" DisplayName="Add to Red Zone Group" GroupId="[RedZoneGroup.Id]" sap2010:WorkflowViewState.IdRef="ManageGroupMembership_4" PersonId="[entity.PersonId]" UserId="2" />
+                                      <ccwa:LogLine DisplayName="Log Add to Red Zone Group" sap2010:WorkflowViewState.IdRef="LogLine_7" Text="[environment.NewLine + Environment.NewLine + &quot;The following students were added to the Red Zone Group:  &quot; + entity.StudentId.ToString + Environment.NewLine + Environment.NewLine]" />
+                                    </Sequence>
+                                  </FlowStep>
+                                </FlowStep.Next>
+                              </FlowStep>
+                            </FlowDecision.True>
+                            <FlowDecision.False>
+                              <x:Reference>__ReferenceID0</x:Reference>
+                            </FlowDecision.False>
+                          </FlowDecision>
+                        </FlowStep.Next>
+                      </FlowStep>
+                    </FlowDecision.True>
+                    <FlowDecision.False>
+                      <FlowDecision x:Name="__ReferenceID7" Condition="[GPA &lt; 2.20 and GPA &gt; 1.99]" DisplayName="GPA &lt; 2.20 and &gt; 1.99?" sap2010:WorkflowViewState.IdRef="FlowDecision_1">
+                        <FlowDecision.True>
+                          <FlowStep x:Name="__ReferenceID12" sap2010:WorkflowViewState.IdRef="FlowStep_9">
+                            <Sequence DisplayName="Check to see if in Red Group" sap2010:WorkflowViewState.IdRef="Sequence_9">
+                              <ccwa:ExecuteDataReader CommandText="[&quot;select sygroupsid from SyStudGrp where sygroupsid = 33010 and dateoff is null and systudentid =&quot; &amp; entity.StudentId.ToString]" DisplayName="Is student in Red group" sap2010:WorkflowViewState.IdRef="ExecuteDataReader_4">
+                                <ccwa:ExecuteDataReader.Body>
+                                  <ActivityAction x:TypeArguments="scg:Dictionary(x:String, x:Object)">
+                                    <ActivityAction.Argument>
+                                      <DelegateInArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" Name="CurrentRow" />
+                                    </ActivityAction.Argument>
+                                    <Assign sap2010:WorkflowViewState.IdRef="Assign_5">
+                                      <Assign.To>
+                                        <OutArgument x:TypeArguments="x:Boolean">[InRedGrp]</OutArgument>
+                                      </Assign.To>
+                                      <Assign.Value>
+                                        <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                                      </Assign.Value>
+                                    </Assign>
+                                  </ActivityAction>
+                                </ccwa:ExecuteDataReader.Body>
+                              </ccwa:ExecuteDataReader>
+                            </Sequence>
+                            <FlowStep.Next>
+                              <FlowDecision x:Name="__ReferenceID13" Condition="[InRedGrp = True]" DisplayName="In Red Group?" sap2010:WorkflowViewState.IdRef="FlowDecision_6">
+                                <FlowDecision.True>
+                                  <FlowStep x:Name="__ReferenceID14" sap2010:WorkflowViewState.IdRef="FlowStep_8">
+                                    <Sequence DisplayName="Remove from Red Zone Group" sap2010:WorkflowViewState.IdRef="Sequence_10">
+                                      <cnw:LookupGroup DisplayName="Find GPA Warning Red Zone Group" Group="[RedZoneGroup]" GroupId="330101" sap2010:WorkflowViewState.IdRef="LookupGroup_5" />
+                                      <cnw:ManageGroupMembership Action="[Cmc.Nexus.Workflow.GroupAction.RemoveFromGroup]" DisplayName="Remove to Red Zone Group" GroupId="[RedZoneGroup.Id]" sap2010:WorkflowViewState.IdRef="ManageGroupMembership_5" PersonId="[entity.PersonId]" UserId="2" />
+                                      <ccwa:LogLine DisplayName="Log Remove from  Red Zone Group" sap2010:WorkflowViewState.IdRef="LogLine_8" Text="[environment.NewLine + Environment.NewLine + &quot;The following students were removed from the Red Zone Group:  &quot; + entity.StudentId.ToString + Environment.NewLine + Environment.NewLine]" />
+                                    </Sequence>
+                                    <FlowStep.Next>
+                                      <FlowStep x:Name="__ReferenceID1" sap2010:WorkflowViewState.IdRef="FlowStep_2">
+                                        <Sequence DisplayName="Add to GPA Warning Yellow Zone Group" sap2010:WorkflowViewState.IdRef="Sequence_4">
+                                          <cnw:LookupGroup DisplayName="Find GPA Warning Yellow Zone Group" Group="[YellowZoneGroup]" GroupId="330111" sap2010:WorkflowViewState.IdRef="LookupGroup_2" />
+                                          <cnw:ManageGroupMembership Action="[Cmc.Nexus.Workflow.GroupAction.AddToGroup]" DisplayName="Add to Yellow Zone Group" GroupId="[YellowZoneGroup.Id]" sap2010:WorkflowViewState.IdRef="ManageGroupMembership_2" PersonId="[entity.PersonId]" UserId="2" />
+                                          <ccwa:LogLine DisplayName="Log Add to Yellow Zone Group" sap2010:WorkflowViewState.IdRef="LogLine_4" Text="[environment.NewLine + Environment.NewLine + &quot;The following students were added to the yellow Zone Group:  &quot; + entity.StudentId.ToString + Environment.NewLine + Environment.NewLine]" />
+                                        </Sequence>
+                                      </FlowStep>
+                                    </FlowStep.Next>
+                                  </FlowStep>
+                                </FlowDecision.True>
+                                <FlowDecision.False>
+                                  <x:Reference>__ReferenceID1</x:Reference>
+                                </FlowDecision.False>
+                              </FlowDecision>
+                            </FlowStep.Next>
+                          </FlowStep>
+                        </FlowDecision.True>
+                        <FlowDecision.False>
+                          <FlowStep x:Name="__ReferenceID15" sap2010:WorkflowViewState.IdRef="FlowStep_11">
+                            <Sequence DisplayName="Remove from Red Zone Group" sap2010:WorkflowViewState.IdRef="Sequence_11">
+                              <cnw:LookupGroup DisplayName="Find GPA Warning Red Zone Group" Group="[RedZoneGroup]" GroupId="330101" sap2010:WorkflowViewState.IdRef="LookupGroup_6" />
+                              <cnw:ManageGroupMembership Action="[Cmc.Nexus.Workflow.GroupAction.RemoveFromGroup]" DisplayName="Remove to Red Zone Group" GroupId="[RedZoneGroup.Id]" sap2010:WorkflowViewState.IdRef="ManageGroupMembership_6" PersonId="[entity.PersonId]" UserId="2" />
+                              <ccwa:LogLine DisplayName="Log Remove from  Red Zone Group" sap2010:WorkflowViewState.IdRef="LogLine_9" Text="[environment.NewLine + Environment.NewLine + &quot;The following students were removed from the Red Zone Group:  &quot; + entity.StudentId.ToString + Environment.NewLine + Environment.NewLine]" />
+                            </Sequence>
+                            <FlowStep.Next>
+                              <FlowStep x:Name="__ReferenceID16" sap2010:WorkflowViewState.IdRef="FlowStep_10">
+                                <Sequence DisplayName="Remove from Yellow Zone Group" sap2010:WorkflowViewState.IdRef="Sequence_12">
+                                  <cnw:LookupGroup DisplayName="Find GPA Warning Yellow Zone Group" Group="[YellowZoneGroup]" GroupId="330111" sap2010:WorkflowViewState.IdRef="LookupGroup_7" />
+                                  <cnw:ManageGroupMembership Action="[Cmc.Nexus.Workflow.GroupAction.RemoveFromGroup]" DisplayName="Remove to Yellow Zone Group" GroupId="[YellowZoneGroup.Id]" sap2010:WorkflowViewState.IdRef="ManageGroupMembership_7" PersonId="[entity.PersonId]" UserId="2" />
+                                  <ccwa:LogLine DisplayName="Log Remove from Yellow Zone Group" sap2010:WorkflowViewState.IdRef="LogLine_10" Text="[environment.NewLine + Environment.NewLine + &quot;The following students were removed form the Yellow  Zone Group:  &quot; + entity.StudentId.ToString + Environment.NewLine + Environment.NewLine]" />
+                                </Sequence>
+                                <FlowStep.Next>
+                                  <FlowStep x:Name="__ReferenceID2" sap2010:WorkflowViewState.IdRef="FlowStep_4">
+                                    <Assign DisplayName="Update Reason" sap2010:WorkflowViewState.IdRef="Assign_2">
+                                      <Assign.To>
+                                        <OutArgument x:TypeArguments="x:String">[Reason]</OutArgument>
+                                      </Assign.To>
+                                      <Assign.Value>
+                                        <InArgument x:TypeArguments="x:String">The student has a GPA of 2.20 or better</InArgument>
+                                      </Assign.Value>
+                                    </Assign>
+                                    <FlowStep.Next>
+                                      <FlowStep x:Name="__ReferenceID3" sap2010:WorkflowViewState.IdRef="FlowStep_3">
+                                        <Sequence DisplayName="End WF" sap2010:WorkflowViewState.IdRef="Sequence_5">
+                                          <ccwa:LogLine DisplayName="Log Ending WF" sap2010:WorkflowViewState.IdRef="LogLine_5" Text="[environment.NewLine + Environment.NewLine + Reason + Environment.NewLine + Environment.NewLine]" />
+                                          <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1" Reason="[Reason]" />
+                                        </Sequence>
+                                      </FlowStep>
+                                    </FlowStep.Next>
+                                  </FlowStep>
+                                </FlowStep.Next>
+                              </FlowStep>
+                            </FlowStep.Next>
+                          </FlowStep>
+                        </FlowDecision.False>
+                      </FlowDecision>
+                    </FlowDecision.False>
+                  </FlowDecision>
+                </FlowDecision.True>
+                <FlowDecision.False>
+                  <x:Reference>__ReferenceID2</x:Reference>
+                </FlowDecision.False>
+              </FlowDecision>
+            </FlowStep.Next>
+          </FlowStep>
+        </FlowDecision.True>
+        <FlowDecision.False>
+          <x:Reference>__ReferenceID3</x:Reference>
+        </FlowDecision.False>
+      </FlowDecision>
+    </Flowchart.StartNode>
+    <x:Reference>__ReferenceID4</x:Reference>
+    <x:Reference>__ReferenceID5</x:Reference>
+    <x:Reference>__ReferenceID6</x:Reference>
+    <x:Reference>__ReferenceID7</x:Reference>
+    <x:Reference>__ReferenceID3</x:Reference>
+    <x:Reference>__ReferenceID8</x:Reference>
+    <x:Reference>__ReferenceID1</x:Reference>
+    <x:Reference>__ReferenceID2</x:Reference>
+    <x:Reference>__ReferenceID9</x:Reference>
+    <x:Reference>__ReferenceID10</x:Reference>
+    <x:Reference>__ReferenceID11</x:Reference>
+    <x:Reference>__ReferenceID0</x:Reference>
+    <x:Reference>__ReferenceID12</x:Reference>
+    <x:Reference>__ReferenceID13</x:Reference>
+    <x:Reference>__ReferenceID14</x:Reference>
+    <x:Reference>__ReferenceID15</x:Reference>
+    <x:Reference>__ReferenceID16</x:Reference>
+    <sads:DebugSymbol.Symbol>d19DOlxDYW1wdXNOZXh1c1dGXENtYy5OZXh1cy5TaXMuQWNhZGVtaWNzLlN0dWRlbnRDb3Vyc2VfU2F2ZWRFdmVudF9QSU1BIC0gR1BBIE5vdGlmaWNhdGlvbnMueGFtbHE+A6QCDwIBAUE0QWgCAQRFNUU8AgEDRjVGPAIBAkk3SXMDAYUB9gEp+QE0AgF/TA11GAIBanc/d1QCAWjsASXzAS4CAWR5Q3lUAgFiqwFHqwFqAgFf3gEd4gEoAgFT5QEh6QEsAgFHrgEdwAEoAgFAwgFQwgFjAgE+zAEp0AE0AgEyxQElyQEwAgEmfBmOASQCAR+QAUyQAWICAR2aASWeATACARGTASGXASwCAQX3ASv3AesBAwGDAfgBK/gBiAEDAYABTQ9N+wECAX1OD2AoAgF2YQ90KAIBa/EBUPEBdwIBZ+4BUe4BWQIBZd8BH98BuAECAVvgAR/gAZsCAgFW4QEf4QHRAgIBVOYBI+YBwgECAU/nASPnAaUCAgFK6AEj6AHcAgIBSK8BH78BOAIBQc0BK80BygECATrOASvOAaUCAgE1zwErzwHZAgIBM8YBJ8YBwAECAS7HASfHAaMCAgEpyAEnyAHZAgIBJ30bjQE0AgEgmwEnmwHAAQIBGZwBJ5wBmwICARSdASedAc8CAgESlAEjlAHCAQIBDZUBI5UBpQICAQiWASOWAdsCAgEG9wGGAfcB6AEDAYQB+AF7+AGFAQMBgQFNaU34AQIBfk4zTpABAgF8VBVdIAIBd2EzYZ4BAgF0ZxVxIAIBbN8BZN8BdAIBXd8Bfd8BhQECAVzgAUHgAXMCAVrgAfoB4AGNAgIBWeABowHgAbYBAgFY4AGVAuABmAICAVfhAYwB4QHOAgIBVeYBa+YBfgIBUeYBhwHmAY8BAgFQ5wFF5wF3AgFO5wGEAucBlwICAU3nAaoB5wHAAQIBTOcBnwLnAaICAgFL6AGTAegB2QICAUmvAUOvAdIBAgFGtQElvAEuAgFCzQFzzQGGAQIBPM0BjwHNAZcBAgE7zgFNzgF6AgE5zgGEAs4BlwICATjOAaoBzgHAAQIBN84BnwLOAaICAgE2zwGVAc8B1gICATTGAWzGAXwCATDGAYUBxgGNAQIBL8cBSccBewIBLccBggLHAZUCAgEsxwGrAccBvgECASvHAZ0CxwGgAgIBKsgBlAHIAdYCAgEofT99zgECASWDASGKASoCASGbAWybAXwCARubAYUBmwGNAQIBGpwBSZwBdgIBGJwB+gGcAY0CAgEXnAGjAZwBtgECARacAZUCnAGYAgIBFZ0BjgGdAcwCAgETlAFrlAF+AgEPlAGHAZQBjwECAQ6VAUWVAXcCAQyVAYQClQGXAgIBC5UBqgGVAcABAgEKlQGfApUBogICAQmWAZIBlgHYAgIBB1UXXCACAXhoF28gAgFvcBdwqQICAW26AVG6AVUCAUW3AVK3AVwCAUOIAU2IAVECASSFAU6FAVsCASJaQVpuAgF7V0JXTgIBeW1DbWsCAXJqRGpJAgFwcG9wpgICAW4=</sads:DebugSymbol.Symbol>
+  </Flowchart>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="LogLine_1" sap:VirtualizedContainerService.HintSize="525,111" />
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="264,184">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ExecuteDataReader_2" sap:VirtualizedContainerService.HintSize="525,386" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="LogLine_2" sap:VirtualizedContainerService.HintSize="242,111" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="264,335">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ExecuteDataReader_1" sap:VirtualizedContainerService.HintSize="525,537" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="200,49">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="242,59" />
+      <sap2010:ViewStateData Id="ExecuteDataReader_3" sap:VirtualizedContainerService.HintSize="647,304" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="200,49">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LookupGroup_3" sap:VirtualizedContainerService.HintSize="318,122" />
+      <sap2010:ViewStateData Id="ManageGroupMembership_3" sap:VirtualizedContainerService.HintSize="318,140" />
+      <sap2010:ViewStateData Id="LogLine_6" sap:VirtualizedContainerService.HintSize="318,104" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="200,49">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LookupGroup_4" sap:VirtualizedContainerService.HintSize="318,122" />
+      <sap2010:ViewStateData Id="ManageGroupMembership_4" sap:VirtualizedContainerService.HintSize="318,140" />
+      <sap2010:ViewStateData Id="LogLine_7" sap:VirtualizedContainerService.HintSize="318,104" />
+      <sap2010:ViewStateData Id="Sequence_8" sap:VirtualizedContainerService.HintSize="200,49">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_6">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">455,863.5</av:Point>
+            <av:Size x:Key="ShapeSize">200,49</av:Size>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_7">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">10,874.5</av:Point>
+            <av:Size x:Key="ShapeSize">200,49</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">110,923.5 110,953.5 555,953.5 555,912.5</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowDecision_5" sap:VirtualizedContainerService.HintSize="94,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <av:Point x:Key="ShapeLocation">315,765.5</av:Point>
+            <av:Size x:Key="ShapeSize">94,87</av:Size>
+            <av:PointCollection x:Key="TrueConnector">315,809 110,809 110,874.5</av:PointCollection>
+            <av:PointCollection x:Key="FalseConnector">409,809 555,809 555,863.5</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_1">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">260,624.5</av:Point>
+            <av:Size x:Key="ShapeSize">200,49</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">360,673.5 360,703.5 362,703.5 362,765.5</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="242,59" />
+      <sap2010:ViewStateData Id="ExecuteDataReader_4" sap:VirtualizedContainerService.HintSize="647,304" />
+      <sap2010:ViewStateData Id="Sequence_9" sap:VirtualizedContainerService.HintSize="200,49">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LookupGroup_5" sap:VirtualizedContainerService.HintSize="318,122" />
+      <sap2010:ViewStateData Id="ManageGroupMembership_5" sap:VirtualizedContainerService.HintSize="318,140" />
+      <sap2010:ViewStateData Id="LogLine_8" sap:VirtualizedContainerService.HintSize="318,104" />
+      <sap2010:ViewStateData Id="Sequence_10" sap:VirtualizedContainerService.HintSize="200,49">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LookupGroup_2" sap:VirtualizedContainerService.HintSize="318,122" />
+      <sap2010:ViewStateData Id="ManageGroupMembership_2" sap:VirtualizedContainerService.HintSize="318,140" />
+      <sap2010:ViewStateData Id="LogLine_4" sap:VirtualizedContainerService.HintSize="318,104" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="200,49">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_2">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">900,944.5</av:Point>
+            <av:Size x:Key="ShapeSize">200,49</av:Size>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_8">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">610,944.5</av:Point>
+            <av:Size x:Key="ShapeSize">200,49</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">710,993.5 710,1023.5 1000,1023.5 1000,993.5</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowDecision_6" sap:VirtualizedContainerService.HintSize="83,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <av:Point x:Key="ShapeLocation">785,805.5</av:Point>
+            <av:Size x:Key="ShapeSize">83,87</av:Size>
+            <av:PointCollection x:Key="TrueConnector">785,849 710,849 710,944.5</av:PointCollection>
+            <av:PointCollection x:Key="FalseConnector">868,849 1000,849 1000,944.5</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_9">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">720,704.5</av:Point>
+            <av:Size x:Key="ShapeSize">200,49</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">820,753.5 820,783.5 826.5,783.5 826.5,805.5</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LookupGroup_6" sap:VirtualizedContainerService.HintSize="318,122" />
+      <sap2010:ViewStateData Id="ManageGroupMembership_6" sap:VirtualizedContainerService.HintSize="318,140" />
+      <sap2010:ViewStateData Id="LogLine_9" sap:VirtualizedContainerService.HintSize="318,104" />
+      <sap2010:ViewStateData Id="Sequence_11" sap:VirtualizedContainerService.HintSize="200,49">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LookupGroup_7" sap:VirtualizedContainerService.HintSize="318,122" />
+      <sap2010:ViewStateData Id="ManageGroupMembership_7" sap:VirtualizedContainerService.HintSize="318,140" />
+      <sap2010:ViewStateData Id="LogLine_10" sap:VirtualizedContainerService.HintSize="318,104" />
+      <sap2010:ViewStateData Id="Sequence_12" sap:VirtualizedContainerService.HintSize="200,49">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,59">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogLine_5" sap:VirtualizedContainerService.HintSize="214,111" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="214,22" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="200,49">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_3">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">890,284.5</av:Point>
+            <av:Size x:Key="ShapeSize">200,49</av:Size>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_4">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">1227.5,550</av:Point>
+            <av:Size x:Key="ShapeSize">242,59</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">1348.5,550 1348.5,310 1090,310</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_10">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">1160,845.5</av:Point>
+            <av:Size x:Key="ShapeSize">200,49</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">1260,894.5 1260,909.5 1499.5,909.5 1499.5,579.5 1469.5,579.5</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_11">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">1160,744.5</av:Point>
+            <av:Size x:Key="ShapeSize">200,49</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">1260,793.5 1260,845.5</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowDecision_1" sap:VirtualizedContainerService.HintSize="132,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <av:Point x:Key="ShapeLocation">992.5,636.5</av:Point>
+            <av:Size x:Key="ShapeSize">132,87</av:Size>
+            <av:PointCollection x:Key="TrueConnector">992.5,680 820,680 820,704.5</av:PointCollection>
+            <av:PointCollection x:Key="FalseConnector">1124.5,680 1260,680 1260,744.5</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowDecision_2" sap:VirtualizedContainerService.HintSize="75,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <av:Point x:Key="ShapeLocation">500,506.02</av:Point>
+            <av:Size x:Key="ShapeSize">75,87</av:Size>
+            <av:PointCollection x:Key="FalseConnector">575,549.52 1058.5,549.52 1058.5,636.5</av:PointCollection>
+            <av:PointCollection x:Key="TrueConnector">500,549.52 360,549.52 360,624.5</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowDecision_4" sap:VirtualizedContainerService.HintSize="70,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <av:Point x:Key="ShapeLocation">590,366.02</av:Point>
+            <av:Size x:Key="ShapeSize">70,87</av:Size>
+            <av:PointCollection x:Key="FalseConnector">660,409.52 690,409.52 690,580 1227.5,580</av:PointCollection>
+            <av:PointCollection x:Key="TrueConnector">590,409.52 538.5,409.52 538.5,506.02</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_5">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">525,285.02</av:Point>
+            <av:Size x:Key="ShapeSize">200,49</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">625,334.02 625,366.02</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowDecision_3" sap:VirtualizedContainerService.HintSize="84,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <av:Point x:Key="ShapeLocation">785,167.5</av:Point>
+            <av:Size x:Key="ShapeSize">84,87</av:Size>
+            <av:PointCollection x:Key="TrueConnector">785,211 625,211 625,285.02</av:PointCollection>
+            <av:PointCollection x:Key="FalseConnector">869,211 990,211 990,284.5</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Flowchart_1" sap:VirtualizedContainerService.HintSize="1582,1085">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <av:Point x:Key="ShapeLocation">790,42.5</av:Point>
+            <av:Size x:Key="ShapeSize">60,75</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">820,117.5 820,147.5 827,147.5 827,167.5</av:PointCollection>
+            <x:Double x:Key="Width">1568</x:Double>
+            <x:Double x:Key="Height">1048.92</x:Double>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="PIMA - GPA Notifications_1" sap:VirtualizedContainerService.HintSize="1622,1165" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
