@@ -29,6 +29,15 @@ This workflow demonstrates how to create a validation for a Saving event handler
 ### Azure
 #### Azure\Cmc.Nexus.Crm.Entities.TaskEntity_SavedEvent_Sample - Azure Service Bus.xaml
 This workflow demonstrates how to on-ramp messages to the [Azure Service Bus](https://docs.microsoft.com/en-us/azure/service-bus/).
+The properties **ServiceBusNamespace**, **SharedAccessKey**, and **SharedAccessKeyName** are not required; however, if they are not provided the activity will pull these settings from the web.config appSettings section.  This is to allow workflows to be reused from environment to environment without modification.
+
+Below is an example of the web.config app settings:
+~~~~
+<add key="azureServiceBus:serviceNamespace" value="nexus-student-integration-bus" />
+<add key="azureServiceBus:sharedAccessKeyName" value="SendSharedAccessKey" />
+<add key="azureServiceBus:sharedAccessKey" value="ZRXqcCfXQaGMi0FXTp6iNtFjMXKG+adnZTO3CcNAqDA=" />
+~~~~
+
 #### Azure\Cmc.Nexus.Crm.Entities.TaskEntity_SavingEvent_Sample - Azure Logic Apps.xaml
 This workflow demonstrates how to invoke an [Azure Logic App](https://docs.microsoft.com/en-us/azure/logic-apps/) from within a CampusNexus Workflow.
 1. Follow the steps above to open the sample Workflow
