@@ -10,6 +10,8 @@ Creating custom activities for use by CampusNexus is identical to creating activ
 [assembly: ExtensionAssembly]
 ```
 **Note: If you have a third party library, or you dont wan't to take a dependency on Cmc.Core, you can always add the custom activity library from within CampusNexus Workflow using the *Add Reference...* ribbon button.**
+### Deployment
+To deploy this solution, copy the **CustomActivities.dll** to the Workflow Composer (alongside WorkflowComposer.exe).  For runtime use, copy **CustomActivities.dll** to the **bin** folder (**bin\Extensions** for CampusNexus Student 21.0 or greater)
 ## Workflows
 ### To open a sample Workflow
 1. Open **CampusNexus Workflow Composer**
