@@ -1,0 +1,285 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="ISIR Match Triggers"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:av="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:cce="clr-namespace:Cmc.Core.Eventing;assembly=Cmc.Core"
+ xmlns:ccwa="clr-namespace:Cmc.Core.Workflow.Activities;assembly=Cmc.Core.Workflow"
+ xmlns:cnae="clr-namespace:Cmc.Nexus.Academics.Entities;assembly=Cmc.Nexus.Academics.Contracts"
+ xmlns:cnaw="clr-namespace:Cmc.Nexus.Academics.Workflow;assembly=Cmc.Nexus.Academics.Workflow"
+ xmlns:cnce="clr-namespace:Cmc.Nexus.Common.Entities;assembly=Cmc.Nexus.Common.Contracts"
+ xmlns:cnce1="clr-namespace:Cmc.Nexus.Crm.Entities;assembly=Cmc.Nexus.Crm.Contracts"
+ xmlns:cncw="clr-namespace:Cmc.Nexus.Common.Workflow;assembly=Cmc.Nexus.Common.Workflow"
+ xmlns:cncw1="clr-namespace:Cmc.Nexus.Crm.Workflow;assembly=Cmc.Nexus.Crm.Workflow"
+ xmlns:cnfe="clr-namespace:Cmc.Nexus.FinancialAid.Entities;assembly=Cmc.Nexus.FinancialAid.Contracts"
+ xmlns:cnfs="clr-namespace:Cmc.Nexus.FinancialAid.Services;assembly=Cmc.Nexus.FinancialAid.Contracts"
+ xmlns:cnfw="clr-namespace:Cmc.Nexus.FinancialAid.Workflow;assembly=Cmc.Nexus.FinancialAid.Workflow"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="entity" Type="InOutArgument(cnfe:IsirMatchEntity)" />
+    <x:Property Name="args" Type="InOutArgument(s:EventArgs)" />
+    <x:Property Name="event" Type="InOutArgument(cce:SavedEvent)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>ISIR Match Triggers_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Cmc.Core.Eventing</x:String>
+      <x:String>Cmc.Nexus.FinancialAid.Entities</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>Cmc.Core.EntityModel</x:String>
+      <x:String>Cmc.Core.ComponentModel</x:String>
+      <x:String>Cmc.Nexus.FinancialAid.Services</x:String>
+      <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+      <x:String>Cmc.Nexus.Academics.Entities</x:String>
+      <x:String>Cmc.Nexus.Common.Entities</x:String>
+      <x:String>Cmc.Nexus.Crm.Entities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Cmc.Core</AssemblyReference>
+      <AssemblyReference>Cmc.Nexus.FinancialAid.Contracts</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>Cmc.Nexus.Academics.Contracts</AssemblyReference>
+      <AssemblyReference>Cmc.Nexus.Common.Contracts</AssemblyReference>
+      <AssemblyReference>Cmc.Nexus.Crm.Contracts</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Flowchart DisplayName="ISIR Match Triggers" sap2010:WorkflowViewState.IdRef="Flowchart_1">
+    <Flowchart.Variables>
+      <Variable x:TypeArguments="cnfs:IsirMessage" Name="ISIR" />
+      <Variable x:TypeArguments="x:String" Name="EFCChangeFlag" />
+      <Variable x:TypeArguments="x:String" Name="Transaction" />
+      <Variable x:TypeArguments="cnae:StudentEnrollmentPeriodEntity" Name="Enroll" />
+      <Variable x:TypeArguments="cnce:StudentAdvisorEntity[]" Name="FAAdvisor" />
+      <Variable x:TypeArguments="cnce1:TaskEntity" Name="Task" />
+    </Flowchart.Variables>
+    <Flowchart.StartNode>
+      <FlowStep x:Name="__ReferenceID1" sap2010:WorkflowViewState.IdRef="FlowStep_1">
+        <Sequence DisplayName="Find ISIR" sap2010:WorkflowViewState.IdRef="Sequence_1">
+          <cnfw:LookupIsir AwardYear="{x:Null}" IsirSsn="{x:Null}" IsirTransactionIdentifier="{x:Null}" ValidationMessages="{x:Null}" sap2010:WorkflowViewState.IdRef="LookupIsir_1" Isir="[ISIR]" IsirMatchId="[entity.Id]" IsirSummaryId="[entity.IsirSummaryId]" />
+          <ccwa:LogObject sap2010:WorkflowViewState.IdRef="LogObject_1" Object="[ISIR]" />
+        </Sequence>
+        <FlowStep.Next>
+          <FlowDecision x:Name="__ReferenceID3" Condition="[ISIR.AdditionalFields(&quot;CPSpushedISIRflag&quot;)=(&quot;Y&quot;)]" sap2010:WorkflowViewState.IdRef="FlowDecision_2">
+            <FlowDecision.True>
+              <FlowStep x:Name="__ReferenceID4" sap2010:WorkflowViewState.IdRef="FlowStep_4">
+                <Sequence DisplayName="Find ISIR Values" sap2010:WorkflowViewState.IdRef="Sequence_7">
+                  <ccwa:ExecuteDataReader CommandText="[&quot;select COALESCE(EFCChangeFlag, '0') as EFCChangeFlag, TransactionNumber, FaISIRMainId from vw_faisirnewallincluded where FAISIRMainId =  &quot; &amp; ISIR.IsirSummaryId]" sap2010:WorkflowViewState.IdRef="ExecuteDataReader_2">
+                    <ccwa:ExecuteDataReader.Body>
+                      <ActivityAction x:TypeArguments="scg:Dictionary(x:String, x:Object)">
+                        <ActivityAction.Argument>
+                          <DelegateInArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" Name="CurrentRow" />
+                        </ActivityAction.Argument>
+                        <Sequence DisplayName="Assign ISIR Values" sap2010:WorkflowViewState.IdRef="Sequence_6">
+                          <Assign DisplayName="Assign Transaction Number" sap2010:WorkflowViewState.IdRef="Assign_4">
+                            <Assign.To>
+                              <OutArgument x:TypeArguments="x:String">[Transaction]</OutArgument>
+                            </Assign.To>
+                            <Assign.Value>
+                              <InArgument x:TypeArguments="x:String">[DirectCast(CurrentRow("TransactionNumber"), string)]</InArgument>
+                            </Assign.Value>
+                          </Assign>
+                          <Assign DisplayName="Assign EFCChangeFlag" sap2010:WorkflowViewState.IdRef="Assign_5">
+                            <Assign.To>
+                              <OutArgument x:TypeArguments="x:String">[EFCChangeFlag]</OutArgument>
+                            </Assign.To>
+                            <Assign.Value>
+                              <InArgument x:TypeArguments="x:String">[DirectCast(CurrentRow("EFCChangeFlag"), string)]</InArgument>
+                            </Assign.Value>
+                          </Assign>
+                        </Sequence>
+                      </ActivityAction>
+                    </ccwa:ExecuteDataReader.Body>
+                  </ccwa:ExecuteDataReader>
+                </Sequence>
+                <FlowStep.Next>
+                  <FlowDecision x:Name="__ReferenceID5" Condition="[Transaction &lt;&gt; &quot;01&quot; AndAlso (EFCChangeFlag = &quot;1&quot; or EFCChangeFlag = &quot;2&quot;)]" sap2010:WorkflowViewState.IdRef="FlowDecision_3">
+                    <FlowDecision.True>
+                      <FlowStep x:Name="__ReferenceID2" sap2010:WorkflowViewState.IdRef="FlowStep_2">
+                        <Sequence DisplayName="Send Activity to Staff" sap2010:WorkflowViewState.IdRef="Sequence_3">
+                          <cnaw:LookupCurrentEnrollmentPeriod ValidationMessages="{x:Null}" EnrollmentPeriod="[Enroll]" sap2010:WorkflowViewState.IdRef="LookupCurrentEnrollmentPeriod_1" StudentId="[entity.StudentId]" />
+                          <cncw:LookupStudentAdvisors ValidationMessages="{x:Null}" sap2010:WorkflowViewState.IdRef="LookupStudentAdvisors_1" Module="FA" StudentAdvisors="[FAAdvisor]" StudentEnrollmentPeriodId="[Enroll.Id]" />
+                          <cncw1:CreateTask ValidationMessages="{x:Null}" WorkFlowInstanceId="{x:Null}" DueDate="[datetime.Now]" sap2010:WorkflowViewState.IdRef="CreateTask_1" Note="[&quot;Please re-evaluate the aid on file for student:  &quot; + Enroll.Student.FirstName + &quot; &quot; + Enroll.Student.LastName + &quot;.  &quot; + &quot;The student number for the student is:  &quot; + Enroll.Student.StudentNumber + &quot;.&quot; + &quot;A new ISIR has been received.&quot;]" OwnerUserId="[FAAdvisor(0).StaffId]" Priority="High" StartDate="[datetime.Now]" StudentId="[entity.StudentId]" Subject="Re-Evaluate Aid" Task="[Task]" TaskStatusId="11" TaskTypeId="314" />
+                          <cncw1:SaveTask ValidationMessages="{x:Null}" sap2010:WorkflowViewState.IdRef="SaveTask_1" Task="[Task]" />
+                        </Sequence>
+                      </FlowStep>
+                    </FlowDecision.True>
+                    <FlowDecision.False>
+                      <FlowStep x:Name="__ReferenceID0" sap2010:WorkflowViewState.IdRef="FlowStep_3">
+                        <Sequence DisplayName="Terminate WF" sap2010:WorkflowViewState.IdRef="Sequence_4">
+                          <Sequence.Variables>
+                            <Variable x:TypeArguments="x:String" Default="These are not the ISIR values we are looking for.  Ending WF." Name="Reason" />
+                          </Sequence.Variables>
+                          <ccwa:LogLine DisplayName="Log Ending WF" sap2010:WorkflowViewState.IdRef="LogLine_1" Text="[environment.NewLine + Environment.NewLine + Reason + Environment.NewLine + Environment.NewLine]" />
+                          <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1" Reason="[Reason]" />
+                        </Sequence>
+                      </FlowStep>
+                    </FlowDecision.False>
+                  </FlowDecision>
+                </FlowStep.Next>
+              </FlowStep>
+            </FlowDecision.True>
+            <FlowDecision.False>
+              <x:Reference>__ReferenceID0</x:Reference>
+            </FlowDecision.False>
+          </FlowDecision>
+        </FlowStep.Next>
+      </FlowStep>
+    </Flowchart.StartNode>
+    <x:Reference>__ReferenceID1</x:Reference>
+    <x:Reference>__ReferenceID2</x:Reference>
+    <x:Reference>__ReferenceID0</x:Reference>
+    <x:Reference>__ReferenceID3</x:Reference>
+    <x:Reference>__ReferenceID4</x:Reference>
+    <x:Reference>__ReferenceID5</x:Reference>
+    <sads:DebugSymbol.Symbol>d5YBQzpcQ2FtcHVzTmV4dXNcU3RlcGhhbmllYW5kUmF5XFN0YWdpbmdcT3RoZXJXb3JrZmxvd3NcRmxvd0NoYXJ0V0ZzXENtYy5OZXh1cy5GaW5hbmNpYWxBaWQuRW50aXRpZXMuSXNpck1hdGNoRW50aXR5X1NhdmVkRXZlbnRfSVNJUiBNYXRjaCBUcmlnZ2Vycy54YW1sL0wDpQEPAgEBVwlaFAIBNVw7XIMBAgE0igEZkAEkAgEtXxF7HAIBH31DfbMBAgEbgAEZhQEkAgECWAtYhwICAThZC1lbAgE2jAFKjAGJAQIBLo4BG44B2wECATKPARuPAXgCAS9gE3osAgEggQEbgQHcAQIBF4IBG4IB4wECARKDARuDAZ0FAgEGhAEbhAGGAQIBA1i7AVjDAQIBO1jQAVjdAQIBOljsAViEAgIBOVlQWVgCATeOAXaOAdgBAgEzjwFrjwF1AgEwYDdg6QECASxmGXckAgEhgQFugQF4AgEZgQHFAYEB2QECARiCAdMBggHgAQIBFoIBlgGCAZoBAgEVggGrAYIBuAECARODAe0DgwGFBAIBEYMBoASDAbAEAgEQgwGPBIMBlQQCAQ+DAbYBgwHgAwIBDoMB2ASDAekEAgENgwFxgwGBAQIBDIMB7wSDAfcEAgEKgwGVBYMBmgUCAQmDAYUFgwGJBQIBCIMBuwSDAc8EAgEHhAF7hAGDAQIBBGcbbiQCASdvG3YkAgEibEZsewIBKmlHaVQCASh0RnR3AgElcUdxVgIBIw==</sads:DebugSymbol.Symbol>
+  </Flowchart>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="LookupIsir_1" sap:VirtualizedContainerService.HintSize="313.6,316.8" />
+      <sap2010:ViewStateData Id="LogObject_1" sap:VirtualizedContainerService.HintSize="313.6,22.4" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="200,52.8">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="243.2,60.8" />
+      <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="243.2,60.8" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="265.6,286.4">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ExecuteDataReader_2" sap:VirtualizedContainerService.HintSize="910.4,492.8" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="932.8,617.6">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LookupCurrentEnrollmentPeriod_1" sap:VirtualizedContainerService.HintSize="313.6,22.4" />
+      <sap2010:ViewStateData Id="LookupStudentAdvisors_1" sap:VirtualizedContainerService.HintSize="313.6,115.2" />
+      <sap2010:ViewStateData Id="CreateTask_1" sap:VirtualizedContainerService.HintSize="313.6,432" />
+      <sap2010:ViewStateData Id="SaveTask_1" sap:VirtualizedContainerService.HintSize="313.6,22.4" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="200,52.8">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_2">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">130,548.12</av:Point>
+            <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogLine_1" sap:VirtualizedContainerService.HintSize="214.4,115.2" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="214.4,22.4" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="200,52.8">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_3">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">685.4,327.7</av:Point>
+            <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowDecision_3" sap:VirtualizedContainerService.HintSize="70.4,87.2">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <av:Point x:Key="ShapeLocation">380,430.92</av:Point>
+            <av:Size x:Key="ShapeSize">70.4,87.2</av:Size>
+            <av:PointCollection x:Key="TrueConnector">380,474.52 350,474.52 350,574.52 330,574.52</av:PointCollection>
+            <av:PointCollection x:Key="FalseConnector">450.4,474.52 785.4,474.52 785.4,380.5</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_4">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">315,328.12</av:Point>
+            <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">415,380.92 415,410.92 415.2,410.92 415.2,430.92</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowDecision_2" sap:VirtualizedContainerService.HintSize="70.4,87.2">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <av:Point x:Key="ShapeLocation">565,230.5</av:Point>
+            <av:Size x:Key="ShapeSize">70.4,87.2</av:Size>
+            <av:PointCollection x:Key="TrueConnector">565,274.1 535,274.1 535,354.52 515,354.52</av:PointCollection>
+            <av:PointCollection x:Key="FalseConnector">635.4,274.1 665.4,274.1 665.4,354.1 685.4,354.1</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_1">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">500,127.7</av:Point>
+            <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">600,180.5 600,210.5 600.2,210.5 600.2,230.5</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Flowchart_1" sap:VirtualizedContainerService.HintSize="1216,715.2">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <av:Point x:Key="ShapeLocation">570,2.5</av:Point>
+            <av:Size x:Key="ShapeSize">60,75.2</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">600,77.7 600,127.7</av:PointCollection>
+            <x:Double x:Key="Width">1202</x:Double>
+            <x:Double x:Key="Height">678.7199999999998</x:Double>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ISIR Match Triggers_1" sap:VirtualizedContainerService.HintSize="1256,795.2" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
